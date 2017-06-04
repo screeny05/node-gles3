@@ -179,46 +179,24 @@ DECLARE_NAPI_METHOD(GetJoystickAxes){
     GET_NAPI_PARAMS_INFO(1);
     GET_NAPI_PARAM_INT64(joy, 0);
 
-    int i;
     int count;
     const float* values;
 
-    napi_value arrayValue;
-    napi_value singleValue;
-
     values = glfwGetJoystickAxes(joy, &count);
 
-    napi_create_array_with_length(env, count, &arrayValue);
-
-    for(i = 0; i < count; i++){
-        NAPI_CALL(env, napi_create_number(env, values[i], &singleValue));
-        NAPI_CALL(env, napi_set_element(env, arrayValue, i, singleValue));
-    }
-
-    return arrayValue;
+    RETURN_NAPI_ARRAY_NUMBER(values, count);
 }
 
 DECLARE_NAPI_METHOD(GetJoystickButtons){
     GET_NAPI_PARAMS_INFO(1);
     GET_NAPI_PARAM_INT64(joy, 0);
 
-    int i;
     int count;
     const unsigned char* values;
 
-    napi_value arrayValue;
-    napi_value singleValue;
-
     values = glfwGetJoystickButtons(joy, &count);
 
-    napi_create_array_with_length(env, count, &arrayValue);
-
-    for(i = 0; i < count; i++){
-        NAPI_CALL(env, napi_create_number(env, values[i], &singleValue));
-        NAPI_CALL(env, napi_set_element(env, arrayValue, i, singleValue));
-    }
-
-    return arrayValue;
+    RETURN_NAPI_ARRAY_NUMBER(values, count);
 }
 
 DECLARE_NAPI_METHOD(GetJoystickName){
@@ -401,15 +379,6 @@ DECLARE_NAPI_METHOD(InitGlad){
     RETURN_NAPI_UNDEFINED();
 }
 
-DECLARE_NAPI_METHOD(TestFrame){
-    float ratio = 640.0 / (float) 480.0;
-    float z = 0.0;
-
-    glViewport(0, 0, 640.0, 480.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
-
-
 void onExit(){
     printf("goodbye!");
 }
@@ -428,7 +397,6 @@ void _ModuleInit(napi_env env, napi_value exports, napi_value module, void* priv
     signal(SIGINT, onSigInt);
 
     EXPORT_NAPI_METHOD("initGlad", InitGlad);
-    EXPORT_NAPI_METHOD("testFrame", TestFrame);
 
     // context
     EXPORT_NAPI_METHOD("makeContextCurrent", MakeContextCurrent);
@@ -732,4 +700,4 @@ void _ModuleInit(napi_env env, napi_value exports, napi_value module, void* priv
     EXPORT_NAPI_CONST_GLFW(DISCONNECTED);
 }
 
-NAPI_MODULE(glfw, _ModuleInit)
+NAPI_MODULE(glfw, _ModuleInit);

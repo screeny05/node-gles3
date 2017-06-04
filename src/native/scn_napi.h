@@ -9,10 +9,35 @@
 #define EXPORT_NAPI_CONST_GLFW(name) \
     EXPORT_NAPI_CONST_NUMBER(#name, GLFW_##name);
 
+#define EXPORT_NAPI_CONST_GL(name) \
+    EXPORT_NAPI_CONST_NUMBER(#name, GL_##name);
+
 #define RETURN_NAPI_BASE(getValueCall) \
     napi_value returnValue; \
     NAPI_CALL(env, getValueCall); \
     return returnValue;
+
+#define RETURN_NAPI_GL_ACTIVE_INFO(name, size, type) \
+    napi_value val; \
+    napi_value returnValue; \
+    NAPI_CALL(env, napi_create_object(env, &returnValue)); \
+    NAPI_CALL(env, napi_create_string_utf8(env, name, -1, &val)); \
+    NAPI_CALL(env, napi_set_named_property(env, returnValue, "name", val)); \
+    NAPI_CALL(env, napi_create_number(env, size, &val)); \
+    NAPI_CALL(env, napi_set_named_property(env, returnValue, "size", val)); \
+    NAPI_CALL(env, napi_create_number(env, type, &val)); \
+    NAPI_CALL(env, napi_set_named_property(env, returnValue, "type", val)); \
+    return returnValue;
+
+#define RETURN_NAPI_ARRAY_NUMBER(array, count) \
+    napi_value arrayValue; \
+    napi_value singleValue; \
+    napi_create_array_with_length(env, count, &arrayValue); \
+    for(int i = 0; i < count; i++){ \
+        NAPI_CALL(env, napi_create_number(env, array[i], &singleValue)); \
+        NAPI_CALL(env, napi_set_element(env, arrayValue, i, singleValue)); \
+    } \
+    return arrayValue;
 
 #define RETURN_NAPI_UNDEFINED() RETURN_NAPI_BASE(napi_get_undefined(env, &returnValue))
 #define RETURN_NAPI_NUMBER(val) RETURN_NAPI_BASE(napi_create_number(env, val, &returnValue))
@@ -47,9 +72,30 @@
     NAPI_ASSERT(env, valuetype == napi_function, "Expected argument " #name "(" #i ") to be of type function"); \
     napi_value name = args[i];
 
+#define GET_NAPI_PARAM_ARRAY_BUFFER(name, i) \
+    size_t byteLength_##name; \
+    void* name; \
+    bool isTypedArray_##name; \
+    bool isArrayBuffer_##name; \
+    NAPI_CALL(env, napi_is_typedarray(env, args[i], &isTypedArray_##name)); \
+    NAPI_CALL(env, napi_is_arraybuffer(env, args[i], &isArrayBuffer_##name)); \
+    NAPI_ASSERT(env, isTypedArray_##name || isArrayBuffer_##name, "Expected argument " #name "(" #i ") to be of type TypedArray or ArrayBuffer"); \
+    if(isTypedArray_##name){ \
+        napi_value bufferValue_##name; \
+        NAPI_CALL(env, napi_get_typedarray_info(env, args[i], NULL, NULL, NULL, &bufferValue_##name, NULL)); \
+        NAPI_CALL(env, napi_get_arraybuffer_info(env, bufferValue_##name, &name, &byteLength_##name)); \
+    } else { \
+        NAPI_CALL(env, napi_get_arraybuffer_info(env, args[i], &name, &byteLength_##name)); \
+    }
+
+
 #define GET_NAPI_PARAM_INT64(name, i) GET_NAPI_PARAM_BASE(name, i, napi_number, int64_t, napi_get_value_int64, "number");
 #define GET_NAPI_PARAM_INT32(name, i) GET_NAPI_PARAM_BASE(name, i, napi_number, int32_t, napi_get_value_int32, "number");
+#define GET_NAPI_PARAM_UINT32(name, i) GET_NAPI_PARAM_BASE(name, i, napi_number, uint32_t, napi_get_value_uint32, "number");
 #define GET_NAPI_PARAM_DOUBLE(name, i) GET_NAPI_PARAM_BASE(name, i, napi_number, double, napi_get_value_double, "number");
+#define GET_NAPI_PARAM_BOOL(name, i) GET_NAPI_PARAM_BASE(name, i, napi_boolean, bool, napi_get_value_bool, "bool");
+
+#define GET_NAPI_PARAM_GLENUM GET_NAPI_PARAM_UINT32
 
 #define DECLARE_NAPI_METHOD(name) napi_value name(napi_env env, napi_callback_info info)
 

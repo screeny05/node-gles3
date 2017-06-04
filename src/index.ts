@@ -1,8 +1,9 @@
 import * as bindings from 'bindings';
 
 const rawGlfw = bindings('glfw');
+const rawGles = bindings('gles');
 
-export { rawGlfw };
+export { rawGlfw, rawGles };
 
 console.log(rawGlfw.init());
 console.log(rawGlfw.getMonitors());
@@ -18,7 +19,7 @@ const raf = cb => setImmediate(_ => {
 }, 16);
 
 const frame = () => raf(delta => {
-    rawGlfw.testFrame();
+    rawGles.clear(rawGles.COLOR_BUFFER_BIT)
     frame();
 });
 
@@ -44,5 +45,14 @@ console.log(rawGlfw.joystickPresent(0));
 console.log(rawGlfw.makeContextCurrent(win));
 console.log('ext', rawGlfw.extensionSupported("GL_ARB_debug_output"));
 console.log(rawGlfw.initGlad());
+
+console.log('crtbuffer', rawGles.createBuffer());
+console.log('bfbuffer', rawGles.bufferData(rawGles.ARRAY_BUFFER, (new Uint8Array([255, 0, 254, 1, 253, 2, 252, 3])).buffer, rawGles.STATIC_DRAW));
+console.log('subbuffer', rawGles.bufferSubData(rawGles.ARRAY_BUFFER, 2, (new Uint8Array([255, 0, 254, 1, 253, 2, 252, 3])).buffer));
+
+rawGles.compressedTexImage2D(rawGles.TEXTURE_2D, 0, 0, 1, 1, 0, new Uint8Array([0, 0, 0, 0]));
+
+console.log(rawGles.getActiveAttrib(0, 0))
+console.log('isShader', rawGles.isShader(0));
 
 frame();

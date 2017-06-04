@@ -16,6 +16,20 @@
             "library_dirs": [
                 "/usr/local/lib"
             ]
+        },
+
+        {
+            "target_name": "gles",
+            "sources": [
+                "src/native/gles.cc"
+            ],
+            "include_dirs": [
+                "src/native/deps/include"
+            ],
+            "libraries": [],
+            "library_dirs": [
+                "/usr/local/lib"
+            ]
         }
     ]
 }
