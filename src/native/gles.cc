@@ -950,6 +950,16 @@ DECLARE_NAPI_METHOD(Scissor){
     RETURN_NAPI_UNDEFINED();
 }
 
+DECLARE_NAPI_METHOD(ShaderBinary){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_UINT32(shader, 0);
+    GET_NAPI_PARAM_GLENUM(binaryformat, 1);
+    GET_NAPI_PARAM_ARRAY_BUFFER(bin, 2);
+
+    glShaderBinary(1, &shader, binaryformat, bin, byteLength_bin);
+    RETURN_NAPI_UNDEFINED();
+}
+
 // WEBGL1-COMPAT
 DECLARE_NAPI_METHOD(ShaderSource){
     GET_NAPI_PARAMS_INFO(2);
@@ -1048,6 +1058,16 @@ DECLARE_NAPI_METHOD(TexParameterf){
     RETURN_NAPI_UNDEFINED();
 }
 
+DECLARE_NAPI_METHOD(TexParameterfv){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_GLENUM(target, 0);
+    GET_NAPI_PARAM_GLENUM(pname, 1);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(params, 2);
+
+    glTexParameterfv(target, pname, (float*)params);
+    RETURN_NAPI_UNDEFINED();
+}
+
 DECLARE_NAPI_METHOD(TexParameteri){
     GET_NAPI_PARAMS_INFO(3);
     GET_NAPI_PARAM_GLENUM(target, 0);
@@ -1055,6 +1075,16 @@ DECLARE_NAPI_METHOD(TexParameteri){
     GET_NAPI_PARAM_INT32(param, 2);
 
     glTexParameteri(target, pname, param);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(TexParameteriv){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_GLENUM(target, 0);
+    GET_NAPI_PARAM_GLENUM(pname, 1);
+    GET_NAPI_PARAM_TYPED_ARRAY_INT32(params, 2);
+
+    glTexParameteriv(target, pname, (int32_t*)params);
     RETURN_NAPI_UNDEFINED();
 }
 
@@ -1074,6 +1104,7 @@ DECLARE_NAPI_METHOD(TexSubImage2D){
     RETURN_NAPI_UNDEFINED();
 }
 
+// WEBGL1-COMPAT
 DECLARE_NAPI_METHOD(Uniform1f){
     GET_NAPI_PARAMS_INFO(2);
     GET_NAPI_PARAM_INT32(location, 0);
@@ -1083,6 +1114,7 @@ DECLARE_NAPI_METHOD(Uniform1f){
     RETURN_NAPI_UNDEFINED();
 }
 
+// WEBGL1-COMPAT
 DECLARE_NAPI_METHOD(Uniform1fv){
     GET_NAPI_PARAMS_INFO(2);
     GET_NAPI_PARAM_INT32(location, 0);
@@ -1093,6 +1125,7 @@ DECLARE_NAPI_METHOD(Uniform1fv){
     RETURN_NAPI_UNDEFINED();
 }
 
+// WEBGL1-COMPAT
 DECLARE_NAPI_METHOD(Uniform1i){
     GET_NAPI_PARAMS_INFO(2);
     GET_NAPI_PARAM_INT32(location, 0);
@@ -1102,12 +1135,299 @@ DECLARE_NAPI_METHOD(Uniform1i){
     RETURN_NAPI_UNDEFINED();
 }
 
+// WEBGL1-COMPAT
 DECLARE_NAPI_METHOD(Uniform1iv){
     GET_NAPI_PARAMS_INFO(2);
     GET_NAPI_PARAM_INT32(location, 0);
     GET_NAPI_PARAM_TYPED_ARRAY_INT32(values, 1);
 
     glUniform1iv(location, length_values, (int32_t*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform2f){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_DOUBLE(v0, 1);
+    GET_NAPI_PARAM_DOUBLE(v1, 2);
+
+    glUniform2f(location, v0, v1);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform2fv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 1);
+
+    glUniform2fv(location, length_values / 2, (float*)values);
+
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform2i){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_INT32(v0, 1);
+    GET_NAPI_PARAM_INT32(v1, 2);
+
+    glUniform2i(location, v0, v1);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform2iv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_INT32(values, 1);
+
+    glUniform2iv(location, length_values / 2, (int32_t*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform3f){
+    GET_NAPI_PARAMS_INFO(4);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_DOUBLE(v0, 1);
+    GET_NAPI_PARAM_DOUBLE(v1, 2);
+    GET_NAPI_PARAM_DOUBLE(v2, 3);
+
+    glUniform3f(location, v0, v1, v2);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform3fv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 1);
+
+    glUniform3fv(location, length_values / 3, (float*)values);
+
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform3i){
+    GET_NAPI_PARAMS_INFO(4);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_INT32(v0, 1);
+    GET_NAPI_PARAM_INT32(v1, 2);
+    GET_NAPI_PARAM_INT32(v2, 3);
+
+    glUniform3i(location, v0, v1, v2);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform3iv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_INT32(values, 1);
+
+    glUniform3iv(location, length_values / 3, (int32_t*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform4f){
+    GET_NAPI_PARAMS_INFO(5);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_DOUBLE(v0, 1);
+    GET_NAPI_PARAM_DOUBLE(v1, 2);
+    GET_NAPI_PARAM_DOUBLE(v2, 3);
+    GET_NAPI_PARAM_DOUBLE(v3, 4);
+
+    glUniform4f(location, v0, v1, v2, v3);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform4fv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 1);
+
+    glUniform4fv(location, length_values / 4, (float*)values);
+
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform4i){
+    GET_NAPI_PARAMS_INFO(5);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_INT32(v0, 1);
+    GET_NAPI_PARAM_INT32(v1, 2);
+    GET_NAPI_PARAM_INT32(v2, 3);
+    GET_NAPI_PARAM_INT32(v3, 4);
+
+    glUniform4i(location, v0, v1, v2, v3);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(Uniform4iv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_INT32(values, 1);
+
+    glUniform4iv(location, length_values / 4, (int32_t*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(UniformMatrix2fv){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_BOOL(transpose, 1);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 2);
+
+    glUniformMatrix2fv(location, length_values / 4, transpose, (float*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(UniformMatrix3fv){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_BOOL(transpose, 1);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 2);
+
+    glUniformMatrix3fv(location, length_values / 9, transpose, (float*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(UniformMatrix4fv){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_BOOL(transpose, 1);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 2);
+
+    glUniformMatrix4fv(location, length_values / 16, transpose, (float*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(UseProgram){
+    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAM_UINT32(program, 0);
+
+    glUseProgram(program);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(ValidateProgram){
+    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAM_UINT32(program, 0);
+
+    glValidateProgram(program);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttrib1f){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_DOUBLE(x, 1);
+
+    glVertexAttrib1f(index, x);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttrib1fv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 1);
+
+    glVertexAttrib1fv(index, (float*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttrib2f){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_DOUBLE(x, 1);
+    GET_NAPI_PARAM_DOUBLE(y, 2);
+
+    glVertexAttrib2f(index, x, y);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttrib2fv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 1);
+
+    glVertexAttrib2fv(index, (float*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttrib3f){
+    GET_NAPI_PARAMS_INFO(4);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_DOUBLE(x, 1);
+    GET_NAPI_PARAM_DOUBLE(y, 2);
+    GET_NAPI_PARAM_DOUBLE(z, 3);
+
+    glVertexAttrib3f(index, x, y, z);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttrib3fv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 1);
+
+    glVertexAttrib3fv(index, (float*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttrib4f){
+    GET_NAPI_PARAMS_INFO(5);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_DOUBLE(x, 1);
+    GET_NAPI_PARAM_DOUBLE(y, 2);
+    GET_NAPI_PARAM_DOUBLE(z, 3);
+    GET_NAPI_PARAM_DOUBLE(w, 4);
+
+    glVertexAttrib4f(index, x, y, z, w);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttrib4fv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 1);
+
+    glVertexAttrib4fv(index, (float*)values);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(VertexAttribPointer){
+    GET_NAPI_PARAMS_INFO(6);
+    GET_NAPI_PARAM_UINT32(index, 0);
+    GET_NAPI_PARAM_INT32(size, 1);
+    GET_NAPI_PARAM_GLENUM(type, 2);
+    GET_NAPI_PARAM_BOOL(normalized, 3);
+    GET_NAPI_PARAM_INT32(stride, 4);
+    GET_NAPI_PARAM_INT64(offset, 5);
+
+    glVertexAttribPointer(index, size, type, normalized, stride, (const GLvoid*)offset);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(Viewport){
+    GET_NAPI_PARAMS_INFO(4);
+    GET_NAPI_PARAM_INT32(x, 0);
+    GET_NAPI_PARAM_INT32(y, 1);
+    GET_NAPI_PARAM_INT32(width, 2);
+    GET_NAPI_PARAM_INT32(height, 3);
+
+    glViewport(x, y, width, height);
     RETURN_NAPI_UNDEFINED();
 }
 
@@ -1236,7 +1556,7 @@ void _ModuleInit(napi_env env, napi_value exports, napi_value module, void* priv
 
     EXPORT_NAPI_METHOD("sampleCoverage", SampleCoverage);
     EXPORT_NAPI_METHOD("scissor", Scissor);
-    //#EXPORT_NAPI_METHOD("shaderBinary", ShaderBinary); - needed?
+    EXPORT_NAPI_METHOD("shaderBinary", ShaderBinary);
     EXPORT_NAPI_METHOD("shaderSource", ShaderSource);
     EXPORT_NAPI_METHOD("stencilFunc", StencilFunc);
     EXPORT_NAPI_METHOD("stencilFuncSeparate", StencilFuncSeparate);
@@ -1247,47 +1567,633 @@ void _ModuleInit(napi_env env, napi_value exports, napi_value module, void* priv
 
     EXPORT_NAPI_METHOD("texImage2D", TexImage2D);
     EXPORT_NAPI_METHOD("texParameterf", TexParameterf);
-    //#EXPORT_NAPI_METHOD("texParameterfv", TexParameterfv); - needed?
+    EXPORT_NAPI_METHOD("texParameterfv", TexParameterfv);
     EXPORT_NAPI_METHOD("texParameteri", TexParameteri);
-    //#EXPORT_NAPI_METHOD("texParameteriv", TexParameteriv); - needed?
+    EXPORT_NAPI_METHOD("texParameteriv", TexParameteriv);
     EXPORT_NAPI_METHOD("texSubImage2D", TexSubImage2D);
 
     EXPORT_NAPI_METHOD("uniform1f", Uniform1f);
     EXPORT_NAPI_METHOD("uniform1fv", Uniform1fv);
     EXPORT_NAPI_METHOD("uniform1i", Uniform1i);
     EXPORT_NAPI_METHOD("uniform1iv", Uniform1iv);
-    //EXPORT_NAPI_METHOD("uniform2f", Uniform2f);
-    //EXPORT_NAPI_METHOD("uniform2fv", Uniform2fv);
-    //EXPORT_NAPI_METHOD("uniform2i", Uniform2i);
-    //EXPORT_NAPI_METHOD("uniform2iv", Uniform2iv);
-    //EXPORT_NAPI_METHOD("uniform3f", Uniform3f);
-    //EXPORT_NAPI_METHOD("uniform3fv", Uniform3fv);
-    //EXPORT_NAPI_METHOD("uniform3i", Uniform3i);
-    //EXPORT_NAPI_METHOD("uniform3iv", Uniform3iv);
-    //EXPORT_NAPI_METHOD("uniform4f", Uniform4f);
-    //EXPORT_NAPI_METHOD("uniform4fv", Uniform4fv);
-    //EXPORT_NAPI_METHOD("uniform4i", Uniform4i);
-    //EXPORT_NAPI_METHOD("uniform4iv", Uniform4iv);
-    //EXPORT_NAPI_METHOD("uniformMatrix2fv", UniformMatrix2fv);
-    //EXPORT_NAPI_METHOD("uniformMatrix3fv", UniformMatrix3fv);
-    //EXPORT_NAPI_METHOD("uniformMatrix4fv", UniformMatrix4fv);
-    //EXPORT_NAPI_METHOD("useProgram", UseProgram);
+    EXPORT_NAPI_METHOD("uniform2f", Uniform2f);
+    EXPORT_NAPI_METHOD("uniform2fv", Uniform2fv);
+    EXPORT_NAPI_METHOD("uniform2i", Uniform2i);
+    EXPORT_NAPI_METHOD("uniform2iv", Uniform2iv);
+    EXPORT_NAPI_METHOD("uniform3f", Uniform3f);
+    EXPORT_NAPI_METHOD("uniform3fv", Uniform3fv);
+    EXPORT_NAPI_METHOD("uniform3i", Uniform3i);
+    EXPORT_NAPI_METHOD("uniform3iv", Uniform3iv);
+    EXPORT_NAPI_METHOD("uniform4f", Uniform4f);
+    EXPORT_NAPI_METHOD("uniform4fv", Uniform4fv);
+    EXPORT_NAPI_METHOD("uniform4i", Uniform4i);
+    EXPORT_NAPI_METHOD("uniform4iv", Uniform4iv);
+    EXPORT_NAPI_METHOD("uniformMatrix2fv", UniformMatrix2fv);
+    EXPORT_NAPI_METHOD("uniformMatrix3fv", UniformMatrix3fv);
+    EXPORT_NAPI_METHOD("uniformMatrix4fv", UniformMatrix4fv);
+    EXPORT_NAPI_METHOD("useProgram", UseProgram);
 
-    //EXPORT_NAPI_METHOD("validateProgram", ValidateProgram);
-    //EXPORT_NAPI_METHOD("vertexAttrib1f", VertexAttrib1f);
-    //EXPORT_NAPI_METHOD("vertexAttrib1fv", VertexAttrib1fv);
-    //EXPORT_NAPI_METHOD("vertexAttrib2f", VertexAttrib2f);
-    //EXPORT_NAPI_METHOD("vertexAttrib2fv", VertexAttrib2fv);
-    //EXPORT_NAPI_METHOD("vertexAttrib3f", VertexAttrib3f);
-    //EXPORT_NAPI_METHOD("vertexAttrib3fv", VertexAttrib3fv);
-    //EXPORT_NAPI_METHOD("vertexAttrib4f", VertexAttrib4f);
-    //EXPORT_NAPI_METHOD("vertexAttrib4fv", VertexAttrib4fv);
-    //EXPORT_NAPI_METHOD("vertexAttribPointer", VertexAttribPointer);
-    //EXPORT_NAPI_METHOD("viewport", Viewport);
+    EXPORT_NAPI_METHOD("validateProgram", ValidateProgram);
+    EXPORT_NAPI_METHOD("vertexAttrib1f", VertexAttrib1f);
+    EXPORT_NAPI_METHOD("vertexAttrib1fv", VertexAttrib1fv);
+    EXPORT_NAPI_METHOD("vertexAttrib2f", VertexAttrib2f);
+    EXPORT_NAPI_METHOD("vertexAttrib2fv", VertexAttrib2fv);
+    EXPORT_NAPI_METHOD("vertexAttrib3f", VertexAttrib3f);
+    EXPORT_NAPI_METHOD("vertexAttrib3fv", VertexAttrib3fv);
+    EXPORT_NAPI_METHOD("vertexAttrib4f", VertexAttrib4f);
+    EXPORT_NAPI_METHOD("vertexAttrib4fv", VertexAttrib4fv);
+    EXPORT_NAPI_METHOD("vertexAttribPointer", VertexAttribPointer);
+    EXPORT_NAPI_METHOD("viewport", Viewport);
 
     // GLES 3.0 functions
+    //EXPORT_NAPI_METHOD("readBuffer", ReadBuffer);
+    //EXPORT_NAPI_METHOD("drawRangeElements", DrawRangeElements);
+    //EXPORT_NAPI_METHOD("texImage3D", TexImage3D);
+    //EXPORT_NAPI_METHOD("texSubImage3D", TexSubImage3D);
+    //EXPORT_NAPI_METHOD("copyTexSubImage3D", CopyTexSubImage3D);
+    //EXPORT_NAPI_METHOD("compressedTexImage3D", CompressedTexImage3D);
+    //EXPORT_NAPI_METHOD("compressedTexSubImage3D", CompressedTexSubImage3D);
+    //EXPORT_NAPI_METHOD("genQueries", GenQueries);
+    //EXPORT_NAPI_METHOD("deleteQueries", DeleteQueries);
+    //EXPORT_NAPI_METHOD("isQuery", IsQuery);
+    //EXPORT_NAPI_METHOD("beginQuery", BeginQuery);
+    //EXPORT_NAPI_METHOD("endQuery", EndQuery);
+    //EXPORT_NAPI_METHOD("getQueryiv", GetQueryiv);
+    //EXPORT_NAPI_METHOD("getQueryObjectuiv", GetQueryObjectuiv);
+    //EXPORT_NAPI_METHOD("unmapBuffer", UnmapBuffer);
+    //EXPORT_NAPI_METHOD("getBufferPointerv", GetBufferPointerv);
+    //EXPORT_NAPI_METHOD("drawBuffers", DrawBuffers);
+    //EXPORT_NAPI_METHOD("uniformMatrix2x3fv", UniformMatrix2x3fv);
+    //EXPORT_NAPI_METHOD("uniformMatrix3x2fv", UniformMatrix3x2fv);
+    //EXPORT_NAPI_METHOD("uniformMatrix2x4fv", UniformMatrix2x4fv);
+    //EXPORT_NAPI_METHOD("uniformMatrix4x2fv", UniformMatrix4x2fv);
+    //EXPORT_NAPI_METHOD("uniformMatrix3x4fv", UniformMatrix3x4fv);
+    //EXPORT_NAPI_METHOD("uniformMatrix4x3fv", UniformMatrix4x3fv);
+    //EXPORT_NAPI_METHOD("blitFramebuffer", BlitFramebuffer);
+    //EXPORT_NAPI_METHOD("renderbufferStorageMultisample", RenderbufferStorageMultisample);
+    //EXPORT_NAPI_METHOD("framebufferTextureLayer", FramebufferTextureLayer);
+    //EXPORT_NAPI_METHOD("mapBufferRange", MapBufferRange);
+    //EXPORT_NAPI_METHOD("flushMappedBufferRange", FlushMappedBufferRange);
+    //EXPORT_NAPI_METHOD("bindVertexArray", BindVertexArray);
+    //EXPORT_NAPI_METHOD("deleteVertexArrays", DeleteVertexArrays);
+    //EXPORT_NAPI_METHOD("genVertexArrays", GenVertexArrays);
+    //EXPORT_NAPI_METHOD("isVertexArray", IsVertexArray);
+    //EXPORT_NAPI_METHOD("getIntegeri_v", GetIntegeri_v);
+    //EXPORT_NAPI_METHOD("beginTransformFeedback", BeginTransformFeedback);
+    //EXPORT_NAPI_METHOD("endTransformFeedback", EndTransformFeedback);
+    //EXPORT_NAPI_METHOD("bindBufferRange", BindBufferRange);
+    //EXPORT_NAPI_METHOD("bindBufferBase", BindBufferBase);
+    //EXPORT_NAPI_METHOD("transformFeedbackVaryings", TransformFeedbackVaryings);
+    //EXPORT_NAPI_METHOD("getTransformFeedbackVarying", GetTransformFeedbackVarying);
+    //EXPORT_NAPI_METHOD("vertexAttribIPointer", VertexAttribIPointer);
+    //EXPORT_NAPI_METHOD("getVertexAttribIiv", GetVertexAttribIiv);
+    //EXPORT_NAPI_METHOD("getVertexAttribIuiv", GetVertexAttribIuiv);
+    //EXPORT_NAPI_METHOD("vertexAttribI4i", VertexAttribI4i);
+    //EXPORT_NAPI_METHOD("vertexAttribI4ui", VertexAttribI4ui);
+    //EXPORT_NAPI_METHOD("vertexAttribI4iv", VertexAttribI4iv);
+    //EXPORT_NAPI_METHOD("vertexAttribI4uiv", VertexAttribI4uiv);
+    //EXPORT_NAPI_METHOD("getUniformuiv", GetUniformuiv);
+    //EXPORT_NAPI_METHOD("getFragDataLocation", GetFragDataLocation);
+    //EXPORT_NAPI_METHOD("uniform1ui", Uniform1ui);
+    //EXPORT_NAPI_METHOD("uniform2ui", Uniform2ui);
+    //EXPORT_NAPI_METHOD("uniform3ui", Uniform3ui);
+    //EXPORT_NAPI_METHOD("uniform4ui", Uniform4ui);
+    //EXPORT_NAPI_METHOD("uniform1uiv", Uniform1uiv);
+    //EXPORT_NAPI_METHOD("uniform2uiv", Uniform2uiv);
+    //EXPORT_NAPI_METHOD("uniform3uiv", Uniform3uiv);
+    //EXPORT_NAPI_METHOD("uniform4uiv", Uniform4uiv);
+    //EXPORT_NAPI_METHOD("clearBufferiv", ClearBufferiv);
+    //EXPORT_NAPI_METHOD("clearBufferuiv", ClearBufferuiv);
+    //EXPORT_NAPI_METHOD("clearBufferfv", ClearBufferfv);
+    //EXPORT_NAPI_METHOD("clearBufferfi", ClearBufferfi);
+    //EXPORT_NAPI_METHOD("getStringi", GetStringi);
+    //EXPORT_NAPI_METHOD("copyBufferSubData", CopyBufferSubData);
+    //EXPORT_NAPI_METHOD("getUniformIndices", GetUniformIndices);
+    //EXPORT_NAPI_METHOD("getActiveUniformsiv", GetActiveUniformsiv);
+    //EXPORT_NAPI_METHOD("getUniformBlockIndex", GetUniformBlockIndex);
+    //EXPORT_NAPI_METHOD("getActiveUniformBlockiv", GetActiveUniformBlockiv);
+    //EXPORT_NAPI_METHOD("getActiveUniformBlockName", GetActiveUniformBlockName);
+    //EXPORT_NAPI_METHOD("uniformBlockBinding", UniformBlockBinding);
+    //EXPORT_NAPI_METHOD("drawArraysInstanced", DrawArraysInstanced);
+    //EXPORT_NAPI_METHOD("drawElementsInstanced", DrawElementsInstanced);
+    //EXPORT_NAPI_METHOD("fenceSync", FenceSync);
+    //EXPORT_NAPI_METHOD("isSync", IsSync);
+    //EXPORT_NAPI_METHOD("deleteSync", DeleteSync);
+    //EXPORT_NAPI_METHOD("clientWaitSync", ClientWaitSync);
+    //EXPORT_NAPI_METHOD("waitSync", WaitSync);
+    //EXPORT_NAPI_METHOD("getInteger64v", GetInteger64v);
+    //EXPORT_NAPI_METHOD("getSynciv", GetSynciv);
+    //EXPORT_NAPI_METHOD("getInteger64i_v", GetInteger64i_v);
+    //EXPORT_NAPI_METHOD("getBufferParameteri64v", GetBufferParameteri64v);
+    //EXPORT_NAPI_METHOD("genSamplers", GenSamplers);
+    //EXPORT_NAPI_METHOD("deleteSamplers", DeleteSamplers);
+    //EXPORT_NAPI_METHOD("isSampler", IsSampler);
+    //EXPORT_NAPI_METHOD("bindSampler", BindSampler);
+    //EXPORT_NAPI_METHOD("samplerParameteri", SamplerParameteri);
+    //EXPORT_NAPI_METHOD("samplerParameteriv", SamplerParameteriv);
+    //EXPORT_NAPI_METHOD("samplerParameterf", SamplerParameterf);
+    //EXPORT_NAPI_METHOD("samplerParameterfv", SamplerParameterfv);
+    //EXPORT_NAPI_METHOD("getSamplerParameteriv", GetSamplerParameteriv);
+    //EXPORT_NAPI_METHOD("getSamplerParameterfv", GetSamplerParameterfv);
+    //EXPORT_NAPI_METHOD("vertexAttribDivisor", VertexAttribDivisor);
+    //EXPORT_NAPI_METHOD("bindTransformFeedback", BindTransformFeedback);
+    //EXPORT_NAPI_METHOD("deleteTransformFeedbacks", DeleteTransformFeedbacks);
+    //EXPORT_NAPI_METHOD("genTransformFeedbacks", GenTransformFeedbacks);
+    //EXPORT_NAPI_METHOD("isTransformFeedback", IsTransformFeedback);
+    //EXPORT_NAPI_METHOD("pauseTransformFeedback", PauseTransformFeedback);
+    //EXPORT_NAPI_METHOD("resumeTransformFeedback", ResumeTransformFeedback);
+    //EXPORT_NAPI_METHOD("getProgramBinary", GetProgramBinary);
+    //EXPORT_NAPI_METHOD("programBinary", ProgramBinary);
+    //EXPORT_NAPI_METHOD("programParameteri", ProgramParameteri);
+    //EXPORT_NAPI_METHOD("invalidateFramebuffer", InvalidateFramebuffer);
+    //EXPORT_NAPI_METHOD("invalidateSubFramebuffer", InvalidateSubFramebuffer);
+    //EXPORT_NAPI_METHOD("texStorage2D", TexStorage2D);
+    //EXPORT_NAPI_METHOD("texStorage3D", TexStorage3D);
+    //EXPORT_NAPI_METHOD("getInternalformativ", GetInternalformativ);
 
+    // ext AMD
+    //EXPORT_NAPI_METHOD("getPerfMonitorGroupsAMD", GetPerfMonitorGroupsAMD);
+    //EXPORT_NAPI_METHOD("getPerfMonitorCountersAMD", GetPerfMonitorCountersAMD);
+    //EXPORT_NAPI_METHOD("getPerfMonitorGroupStringAMD", GetPerfMonitorGroupStringAMD);
+    //EXPORT_NAPI_METHOD("getPerfMonitorCounterStringAMD", GetPerfMonitorCounterStringAMD);
+    //EXPORT_NAPI_METHOD("getPerfMonitorCounterInfoAMD", GetPerfMonitorCounterInfoAMD);
+    //EXPORT_NAPI_METHOD("genPerfMonitorsAMD", GenPerfMonitorsAMD);
+    //EXPORT_NAPI_METHOD("eletePerfMonitorsAMD", eletePerfMonitorsAMD);
+    //EXPORT_NAPI_METHOD("selectPerfMonitorCountersAMD", SelectPerfMonitorCountersAMD);
+    //EXPORT_NAPI_METHOD("beginPerfMonitorAMD", BeginPerfMonitorAMD);
+    //EXPORT_NAPI_METHOD("endPerfMonitorAMD", EndPerfMonitorAMD);
+    //EXPORT_NAPI_METHOD("getPerfMonitorCounterDataAMD", GetPerfMonitorCounterDataAMD);
 
+    // ext ANGLE
+    //EXPORT_NAPI_METHOD("blitFramebufferANGLE", BlitFramebufferANGLE);
+    //EXPORT_NAPI_METHOD("renderbufferStorageMultisampleANGLE", RenderbufferStorageMultisampleANGLE);
+    //EXPORT_NAPI_METHOD("drawArraysInstancedANGLE", DrawArraysInstancedANGLE);
+    //EXPORT_NAPI_METHOD("drawElementsInstancedANGLE", DrawElementsInstancedANGLE);
+    //EXPORT_NAPI_METHOD("vertexAttribDivisorANGLE", VertexAttribDivisorANGLE);
+    //EXPORT_NAPI_METHOD("getTranslatedShaderSourceANGLE", GetTranslatedShaderSourceANGLE);
+
+    // ext APPLE
+    //EXPORT_NAPI_METHOD("copyTextureLevelsAPPLE", CopyTextureLevelsAPPLE);
+    //EXPORT_NAPI_METHOD("renderbufferStorageMultisampleAPPLE", RenderbufferStorageMultisampleAPPLE);
+    //EXPORT_NAPI_METHOD("resolveMultisampleFramebufferAPPLE", ResolveMultisampleFramebufferAPPLE);
+    //EXPORT_NAPI_METHOD("fenceSyncAPPLE", FenceSyncAPPLE);
+    //EXPORT_NAPI_METHOD("isSyncAPPLE", IsSyncAPPLE);
+    //EXPORT_NAPI_METHOD("deleteSyncAPPLE", DeleteSyncAPPLE);
+    //EXPORT_NAPI_METHOD("clientWaitSyncAPPLE", ClientWaitSyncAPPLE);
+    //EXPORT_NAPI_METHOD("waitSyncAPPLE", WaitSyncAPPLE);
+    //EXPORT_NAPI_METHOD("getInteger64vAPPLE", GetInteger64vAPPLE);
+    //EXPORT_NAPI_METHOD("getSyncivAPPLE", GetSyncivAPPLE);
+
+    // ext EXT
+    //EXPORT_NAPI_METHOD("drawArraysInstancedBaseInstanceEXT", DrawArraysInstancedBaseInstanceEXT);
+    //EXPORT_NAPI_METHOD("drawElementsInstancedBaseInstanceEXT", DrawElementsInstancedBaseInstanceEXT);
+    //EXPORT_NAPI_METHOD("drawElementsInstancedBaseVertexBaseInstanceEXT", DrawElementsInstancedBaseVertexBaseInstanceEXT);
+    //EXPORT_NAPI_METHOD("bindFragDataLocationIndexedEXT", BindFragDataLocationIndexedEXT);
+    //EXPORT_NAPI_METHOD("bindFragDataLocationEXT", BindFragDataLocationEXT);
+    //EXPORT_NAPI_METHOD("getProgramResourceLocationIndexEXT", GetProgramResourceLocationIndexEXT);
+    //EXPORT_NAPI_METHOD("getFragDataIndexEXT", GetFragDataIndexEXT);
+    //EXPORT_NAPI_METHOD("blendEquationEXT", BlendEquationEXT);
+    //EXPORT_NAPI_METHOD("bufferStorageEXT", BufferStorageEXT);
+    //EXPORT_NAPI_METHOD("clearTexImageEXT", ClearTexImageEXT);
+    //EXPORT_NAPI_METHOD("clearTexSubImageEXT", ClearTexSubImageEXT);
+    //EXPORT_NAPI_METHOD("copyImageSubDataEXT", CopyImageSubDataEXT);
+    //EXPORT_NAPI_METHOD("labelObjectEXT", LabelObjectEXT);
+    //EXPORT_NAPI_METHOD("getObjectLabelEXT", GetObjectLabelEXT);
+    //EXPORT_NAPI_METHOD("insertEventMarkerEXT", InsertEventMarkerEXT);
+    //EXPORT_NAPI_METHOD("pushGroupMarkerEXT", PushGroupMarkerEXT);
+    //EXPORT_NAPI_METHOD("popGroupMarkerEXT", PopGroupMarkerEXT);
+    //EXPORT_NAPI_METHOD("discardFramebufferEXT", DiscardFramebufferEXT);
+    //EXPORT_NAPI_METHOD("genQueriesEXT", GenQueriesEXT);
+    //EXPORT_NAPI_METHOD("deleteQueriesEXT", DeleteQueriesEXT);
+    //EXPORT_NAPI_METHOD("isQueryEXT", IsQueryEXT);
+    //EXPORT_NAPI_METHOD("beginQueryEXT", BeginQueryEXT);
+    //EXPORT_NAPI_METHOD("endQueryEXT", EndQueryEXT);
+    //EXPORT_NAPI_METHOD("queryCounterEXT", QueryCounterEXT);
+    //EXPORT_NAPI_METHOD("getQueryivEXT", GetQueryivEXT);
+    //EXPORT_NAPI_METHOD("getQueryObjectivEXT", GetQueryObjectivEXT);
+    //EXPORT_NAPI_METHOD("getQueryObjectuivEXT", GetQueryObjectuivEXT);
+    //EXPORT_NAPI_METHOD("getQueryObjecti64vEXT", GetQueryObjecti64vEXT);
+    //EXPORT_NAPI_METHOD("getQueryObjectui64vEXT", GetQueryObjectui64vEXT);
+    //EXPORT_NAPI_METHOD("drawBuffersEXT", DrawBuffersEXT);
+    //EXPORT_NAPI_METHOD("enableiEXT", EnableiEXT);
+    //EXPORT_NAPI_METHOD("disableiEXT", DisableiEXT);
+    //EXPORT_NAPI_METHOD("blendEquationiEXT", BlendEquationiEXT);
+    //EXPORT_NAPI_METHOD("blendEquationSeparateiEXT", BlendEquationSeparateiEXT);
+    //EXPORT_NAPI_METHOD("blendFunciEXT", BlendFunciEXT);
+    //EXPORT_NAPI_METHOD("blendFuncSeparateiEXT", BlendFuncSeparateiEXT);
+    //EXPORT_NAPI_METHOD("colorMaskiEXT", ColorMaskiEXT);
+    //EXPORT_NAPI_METHOD("isEnablediEXT", IsEnablediEXT);
+    //EXPORT_NAPI_METHOD("drawElementsBaseVertexEXT", DrawElementsBaseVertexEXT);
+    //EXPORT_NAPI_METHOD("drawRangeElementsBaseVertexEXT", DrawRangeElementsBaseVertexEXT);
+    //EXPORT_NAPI_METHOD("drawElementsInstancedBaseVertexEXT", DrawElementsInstancedBaseVertexEXT);
+    //EXPORT_NAPI_METHOD("multiDrawElementsBaseVertexEXT", MultiDrawElementsBaseVertexEXT);
+    //EXPORT_NAPI_METHOD("drawArraysInstancedEXT", DrawArraysInstancedEXT);
+    //EXPORT_NAPI_METHOD("drawElementsInstancedEXT", DrawElementsInstancedEXT);
+    //EXPORT_NAPI_METHOD("drawTransformFeedbackEXT", DrawTransformFeedbackEXT);
+    //EXPORT_NAPI_METHOD("drawTransformFeedbackInstancedEXT", DrawTransformFeedbackInstancedEXT);
+    //EXPORT_NAPI_METHOD("framebufferTextureEXT", FramebufferTextureEXT);
+    //EXPORT_NAPI_METHOD("vertexAttribDivisorEXT", VertexAttribDivisorEXT);
+    //EXPORT_NAPI_METHOD("mapBufferRangeEXT", MapBufferRangeEXT);
+    //EXPORT_NAPI_METHOD("flushMappedBufferRangeEXT", FlushMappedBufferRangeEXT);
+    //EXPORT_NAPI_METHOD("multiDrawArraysEXT", MultiDrawArraysEXT);
+    //EXPORT_NAPI_METHOD("multiDrawElementsEXT", MultiDrawElementsEXT);
+    //EXPORT_NAPI_METHOD("multiDrawArraysIndirectEXT", MultiDrawArraysIndirectEXT);
+    //EXPORT_NAPI_METHOD("multiDrawElementsIndirectEXT", MultiDrawElementsIndirectEXT);
+    //EXPORT_NAPI_METHOD("renderbufferStorageMultisampleEXT", RenderbufferStorageMultisampleEXT);
+    //EXPORT_NAPI_METHOD("framebufferTexture2DMultisampleEXT", FramebufferTexture2DMultisampleEXT);
+    //EXPORT_NAPI_METHOD("readBufferIndexedEXT", ReadBufferIndexedEXT);
+    //EXPORT_NAPI_METHOD("rawBuffersIndexedEXT", rawBuffersIndexedEXT);
+    //EXPORT_NAPI_METHOD("getIntegeri_vEXT", GetIntegeri_vEXT);
+    //EXPORT_NAPI_METHOD("polygonOffsetClampEXT", PolygonOffsetClampEXT);
+    //EXPORT_NAPI_METHOD("primitiveBoundingBoxEXT", PrimitiveBoundingBoxEXT);
+    //EXPORT_NAPI_METHOD("rasterSamplesEXT", RasterSamplesEXT);
+    //EXPORT_NAPI_METHOD("getGraphicsResetStatusEXT", GetGraphicsResetStatusEXT);
+    //EXPORT_NAPI_METHOD("readnPixelsEXT", ReadnPixelsEXT);
+    //EXPORT_NAPI_METHOD("getnUniformfvEXT", GetnUniformfvEXT);
+    //EXPORT_NAPI_METHOD("getnUniformivEXT", GetnUniformivEXT);
+    //EXPORT_NAPI_METHOD("useShaderProgramEXT", UseShaderProgramEXT);
+    //EXPORT_NAPI_METHOD("activeProgramEXT", ActiveProgramEXT);
+    //EXPORT_NAPI_METHOD("createShaderProgramEXT", CreateShaderProgramEXT);
+    //EXPORT_NAPI_METHOD("activeShaderProgramEXT", ActiveShaderProgramEXT);
+    //EXPORT_NAPI_METHOD("bindProgramPipelineEXT", BindProgramPipelineEXT);
+    //EXPORT_NAPI_METHOD("createShaderProgramvEXT", CreateShaderProgramvEXT);
+    //EXPORT_NAPI_METHOD("eleteProgramPipelinesEXT", eleteProgramPipelinesEXT);
+    //EXPORT_NAPI_METHOD("genProgramPipelinesEXT", GenProgramPipelinesEXT);
+    //EXPORT_NAPI_METHOD("getProgramPipelineInfoLogEXT", GetProgramPipelineInfoLogEXT);
+    //EXPORT_NAPI_METHOD("getProgramPipelineivEXT", GetProgramPipelineivEXT);
+    //EXPORT_NAPI_METHOD("isProgramPipelineEXT", IsProgramPipelineEXT);
+    //EXPORT_NAPI_METHOD("programParameteriEXT", ProgramParameteriEXT);
+    //EXPORT_NAPI_METHOD("programUniform1fEXT", ProgramUniform1fEXT);
+    //EXPORT_NAPI_METHOD("programUniform1fvEXT", ProgramUniform1fvEXT);
+    //EXPORT_NAPI_METHOD("programUniform1iEXT", ProgramUniform1iEXT);
+    //EXPORT_NAPI_METHOD("programUniform1ivEXT", ProgramUniform1ivEXT);
+    //EXPORT_NAPI_METHOD("programUniform2fEXT", ProgramUniform2fEXT);
+    //EXPORT_NAPI_METHOD("programUniform2fvEXT", ProgramUniform2fvEXT);
+    //EXPORT_NAPI_METHOD("programUniform2iEXT", ProgramUniform2iEXT);
+    //EXPORT_NAPI_METHOD("programUniform2ivEXT", ProgramUniform2ivEXT);
+    //EXPORT_NAPI_METHOD("programUniform3fEXT", ProgramUniform3fEXT);
+    //EXPORT_NAPI_METHOD("programUniform3fvEXT", ProgramUniform3fvEXT);
+    //EXPORT_NAPI_METHOD("programUniform3iEXT", ProgramUniform3iEXT);
+    //EXPORT_NAPI_METHOD("programUniform3ivEXT", ProgramUniform3ivEXT);
+    //EXPORT_NAPI_METHOD("programUniform4fEXT", ProgramUniform4fEXT);
+    //EXPORT_NAPI_METHOD("programUniform4fvEXT", ProgramUniform4fvEXT);
+    //EXPORT_NAPI_METHOD("programUniform4iEXT", ProgramUniform4iEXT);
+    //EXPORT_NAPI_METHOD("programUniform4ivEXT", ProgramUniform4ivEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix2fvEXT", ProgramUniformMatrix2fvEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix3fvEXT", ProgramUniformMatrix3fvEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix4fvEXT", ProgramUniformMatrix4fvEXT);
+    //EXPORT_NAPI_METHOD("useProgramStagesEXT", UseProgramStagesEXT);
+    //EXPORT_NAPI_METHOD("validateProgramPipelineEXT", ValidateProgramPipelineEXT);
+    //EXPORT_NAPI_METHOD("programUniform1uiEXT", ProgramUniform1uiEXT);
+    //EXPORT_NAPI_METHOD("programUniform2uiEXT", ProgramUniform2uiEXT);
+    //EXPORT_NAPI_METHOD("programUniform3uiEXT", ProgramUniform3uiEXT);
+    //EXPORT_NAPI_METHOD("programUniform4uiEXT", ProgramUniform4uiEXT);
+    //EXPORT_NAPI_METHOD("programUniform1uivEXT", ProgramUniform1uivEXT);
+    //EXPORT_NAPI_METHOD("programUniform2uivEXT", ProgramUniform2uivEXT);
+    //EXPORT_NAPI_METHOD("programUniform3uivEXT", ProgramUniform3uivEXT);
+    //EXPORT_NAPI_METHOD("programUniform4uivEXT", ProgramUniform4uivEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix2x3fvEXT", ProgramUniformMatrix2x3fvEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix3x2fvEXT", ProgramUniformMatrix3x2fvEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix2x4fvEXT", ProgramUniformMatrix2x4fvEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix4x2fvEXT", ProgramUniformMatrix4x2fvEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix3x4fvEXT", ProgramUniformMatrix3x4fvEXT);
+    //EXPORT_NAPI_METHOD("programUniformMatrix4x3fvEXT", ProgramUniformMatrix4x3fvEXT);
+    //EXPORT_NAPI_METHOD("framebufferPixelLocalStorageSizeEXT", FramebufferPixelLocalStorageSizeEXT);
+    //EXPORT_NAPI_METHOD("getFramebufferPixelLocalStorageSizeEXT", GetFramebufferPixelLocalStorageSizeEXT);
+    //EXPORT_NAPI_METHOD("clearPixelLocalStorageuiEXT", ClearPixelLocalStorageuiEXT);
+    //EXPORT_NAPI_METHOD("texPageCommitmentEXT", TexPageCommitmentEXT);
+    //EXPORT_NAPI_METHOD("patchParameteriEXT", PatchParameteriEXT);
+    //EXPORT_NAPI_METHOD("texParameterIivEXT", TexParameterIivEXT);
+    //EXPORT_NAPI_METHOD("texParameterIuivEXT", TexParameterIuivEXT);
+    //EXPORT_NAPI_METHOD("getTexParameterIivEXT", GetTexParameterIivEXT);
+    //EXPORT_NAPI_METHOD("getTexParameterIuivEXT", GetTexParameterIuivEXT);
+    //EXPORT_NAPI_METHOD("samplerParameterIivEXT", SamplerParameterIivEXT);
+    //EXPORT_NAPI_METHOD("samplerParameterIuivEXT", SamplerParameterIuivEXT);
+    //EXPORT_NAPI_METHOD("getSamplerParameterIivEXT", GetSamplerParameterIivEXT);
+    //EXPORT_NAPI_METHOD("getSamplerParameterIuivEXT", GetSamplerParameterIuivEXT);
+    //EXPORT_NAPI_METHOD("texBufferEXT", TexBufferEXT);
+    //EXPORT_NAPI_METHOD("texBufferRangeEXT", TexBufferRangeEXT);
+    //EXPORT_NAPI_METHOD("texStorage1DEXT", TexStorage1DEXT);
+    //EXPORT_NAPI_METHOD("texStorage2DEXT", TexStorage2DEXT);
+    //EXPORT_NAPI_METHOD("texStorage3DEXT", TexStorage3DEXT);
+    //EXPORT_NAPI_METHOD("textureStorage1DEXT", TextureStorage1DEXT);
+    //EXPORT_NAPI_METHOD("textureStorage2DEXT", TextureStorage2DEXT);
+    //EXPORT_NAPI_METHOD("textureStorage3DEXT", TextureStorage3DEXT);
+    //EXPORT_NAPI_METHOD("textureViewEXT", TextureViewEXT);
+    //EXPORT_NAPI_METHOD("windowRectanglesEXT", WindowRectanglesEXT);
+
+    // ext IMG
+    //EXPORT_NAPI_METHOD("getTextureHandleIMG", GetTextureHandleIMG);
+    //EXPORT_NAPI_METHOD("getTextureSamplerHandleIMG", GetTextureSamplerHandleIMG);
+    //EXPORT_NAPI_METHOD("uniformHandleui64IMG", UniformHandleui64IMG);
+    //EXPORT_NAPI_METHOD("uniformHandleui64vIMG", UniformHandleui64vIMG);
+    //EXPORT_NAPI_METHOD("programUniformHandleui64IMG", ProgramUniformHandleui64IMG);
+    //EXPORT_NAPI_METHOD("programUniformHandleui64vIMG", ProgramUniformHandleui64vIMG);
+    //EXPORT_NAPI_METHOD("framebufferTexture2DDownsampleIMG", FramebufferTexture2DDownsampleIMG);
+    //EXPORT_NAPI_METHOD("framebufferTextureLayerDownsampleIMG", FramebufferTextureLayerDownsampleIMG);
+    //EXPORT_NAPI_METHOD("renderbufferStorageMultisampleIMG", RenderbufferStorageMultisampleIMG);
+    //EXPORT_NAPI_METHOD("framebufferTexture2DMultisampleIMG", FramebufferTexture2DMultisampleIMG);
+
+    // ext INTEL
+    //EXPORT_NAPI_METHOD("applyFramebufferAttachmentCMAAINTEL", ApplyFramebufferAttachmentCMAAINTEL);
+    //EXPORT_NAPI_METHOD("beginPerfQueryINTEL", BeginPerfQueryINTEL);
+    //EXPORT_NAPI_METHOD("createPerfQueryINTEL", CreatePerfQueryINTEL);
+    //EXPORT_NAPI_METHOD("deletePerfQueryINTEL", DeletePerfQueryINTEL);
+    //EXPORT_NAPI_METHOD("endPerfQueryINTEL", EndPerfQueryINTEL);
+    //EXPORT_NAPI_METHOD("getFirstPerfQueryIdINTEL", GetFirstPerfQueryIdINTEL);
+    //EXPORT_NAPI_METHOD("getNextPerfQueryIdINTEL", GetNextPerfQueryIdINTEL);
+    //EXPORT_NAPI_METHOD("getPerfCounterInfoINTEL", GetPerfCounterInfoINTEL);
+    //EXPORT_NAPI_METHOD("getPerfQueryDataINTEL", GetPerfQueryDataINTEL);
+    //EXPORT_NAPI_METHOD("getPerfQueryIdByNameINTEL", GetPerfQueryIdByNameINTEL);
+    //EXPORT_NAPI_METHOD("getPerfQueryInfoINTEL", GetPerfQueryInfoINTEL);
+
+    // ext KHR
+    //EXPORT_NAPI_METHOD("blendBarrierKHR", BlendBarrierKHR);
+    //EXPORT_NAPI_METHOD("debugMessageControl", DebugMessageControl);
+    //EXPORT_NAPI_METHOD("debugMessageInsert", DebugMessageInsert);
+    //EXPORT_NAPI_METHOD("debugMessageCallback", DebugMessageCallback);
+    //EXPORT_NAPI_METHOD("getDebugMessageLog", GetDebugMessageLog);
+    //EXPORT_NAPI_METHOD("pushDebugGroup", PushDebugGroup);
+    //EXPORT_NAPI_METHOD("popDebugGroup", PopDebugGroup);
+    //EXPORT_NAPI_METHOD("objectLabel", ObjectLabel);
+    //EXPORT_NAPI_METHOD("getObjectLabel", GetObjectLabel);
+    //EXPORT_NAPI_METHOD("objectPtrLabel", ObjectPtrLabel);
+    //EXPORT_NAPI_METHOD("getObjectPtrLabel", GetObjectPtrLabel);
+    //EXPORT_NAPI_METHOD("getPointerv", GetPointerv);
+    //EXPORT_NAPI_METHOD("debugMessageControlKHR", DebugMessageControlKHR);
+    //EXPORT_NAPI_METHOD("debugMessageInsertKHR", DebugMessageInsertKHR);
+    //EXPORT_NAPI_METHOD("debugMessageCallbackKHR", DebugMessageCallbackKHR);
+    //EXPORT_NAPI_METHOD("getDebugMessageLogKHR", GetDebugMessageLogKHR);
+    //EXPORT_NAPI_METHOD("pushDebugGroupKHR", PushDebugGroupKHR);
+    //EXPORT_NAPI_METHOD("popDebugGroupKHR", PopDebugGroupKHR);
+    //EXPORT_NAPI_METHOD("objectLabelKHR", ObjectLabelKHR);
+    //EXPORT_NAPI_METHOD("getObjectLabelKHR", GetObjectLabelKHR);
+    //EXPORT_NAPI_METHOD("objectPtrLabelKHR", ObjectPtrLabelKHR);
+    //EXPORT_NAPI_METHOD("getObjectPtrLabelKHR", GetObjectPtrLabelKHR);
+    //EXPORT_NAPI_METHOD("getPointervKHR", GetPointervKHR);
+    //EXPORT_NAPI_METHOD("getGraphicsResetStatus", GetGraphicsResetStatus);
+    //EXPORT_NAPI_METHOD("readnPixels", ReadnPixels);
+    //EXPORT_NAPI_METHOD("getnUniformfv", GetnUniformfv);
+    //EXPORT_NAPI_METHOD("getnUniformiv", GetnUniformiv);
+    //EXPORT_NAPI_METHOD("getnUniformuiv", GetnUniformuiv);
+    //EXPORT_NAPI_METHOD("getGraphicsResetStatusKHR", GetGraphicsResetStatusKHR);
+    //EXPORT_NAPI_METHOD("readnPixelsKHR", ReadnPixelsKHR);
+    //EXPORT_NAPI_METHOD("getnUniformfvKHR", GetnUniformfvKHR);
+    //EXPORT_NAPI_METHOD("getnUniformivKHR", GetnUniformivKHR);
+    //EXPORT_NAPI_METHOD("getnUniformuivKHR", GetnUniformuivKHR);
+
+    // ext NV
+    //EXPORT_NAPI_METHOD("getTextureHandleNV", GetTextureHandleNV);
+    //EXPORT_NAPI_METHOD("getTextureSamplerHandleNV", GetTextureSamplerHandleNV);
+    //EXPORT_NAPI_METHOD("makeTextureHandleResidentNV", MakeTextureHandleResidentNV);
+    //EXPORT_NAPI_METHOD("makeTextureHandleNonResidentNV", MakeTextureHandleNonResidentNV);
+    //EXPORT_NAPI_METHOD("getImageHandleNV", GetImageHandleNV);
+    //EXPORT_NAPI_METHOD("makeImageHandleResidentNV", MakeImageHandleResidentNV);
+    //EXPORT_NAPI_METHOD("makeImageHandleNonResidentNV", MakeImageHandleNonResidentNV);
+    //EXPORT_NAPI_METHOD("uniformHandleui64NV", UniformHandleui64NV);
+    //EXPORT_NAPI_METHOD("uniformHandleui64vNV", UniformHandleui64vNV);
+    //EXPORT_NAPI_METHOD("programUniformHandleui64NV", ProgramUniformHandleui64NV);
+    //EXPORT_NAPI_METHOD("programUniformHandleui64vNV", ProgramUniformHandleui64vNV);
+    //EXPORT_NAPI_METHOD("isTextureHandleResidentNV", IsTextureHandleResidentNV);
+    //EXPORT_NAPI_METHOD("isImageHandleResidentNV", IsImageHandleResidentNV);
+    //EXPORT_NAPI_METHOD("blendParameteriNV", BlendParameteriNV);
+    //EXPORT_NAPI_METHOD("blendBarrierNV", BlendBarrierNV);
+    //EXPORT_NAPI_METHOD("beginConditionalRenderNV", BeginConditionalRenderNV);
+    //EXPORT_NAPI_METHOD("endConditionalRenderNV", EndConditionalRenderNV);
+    //EXPORT_NAPI_METHOD("subpixelPrecisionBiasNV", SubpixelPrecisionBiasNV);
+    //EXPORT_NAPI_METHOD("conservativeRasterParameteriNV", ConservativeRasterParameteriNV);
+    //EXPORT_NAPI_METHOD("copyBufferSubDataNV", CopyBufferSubDataNV);
+    //EXPORT_NAPI_METHOD("coverageMaskNV", CoverageMaskNV);
+    //EXPORT_NAPI_METHOD("coverageOperationNV", CoverageOperationNV);
+    //EXPORT_NAPI_METHOD("drawBuffersNV", DrawBuffersNV);
+    //EXPORT_NAPI_METHOD("drawArraysInstancedNV", DrawArraysInstancedNV);
+    //EXPORT_NAPI_METHOD("drawElementsInstancedNV", DrawElementsInstancedNV);
+    //EXPORT_NAPI_METHOD("drawVkImageNV", DrawVkImageNV);
+    //EXPORT_NAPI_METHOD("getVkProcAddrNV", GetVkProcAddrNV);
+    //EXPORT_NAPI_METHOD("waitVkSemaphoreNV", WaitVkSemaphoreNV);
+    //EXPORT_NAPI_METHOD("signalVkSemaphoreNV", SignalVkSemaphoreNV);
+    //EXPORT_NAPI_METHOD("signalVkFenceNV", SignalVkFenceNV);
+    //EXPORT_NAPI_METHOD("deleteFencesNV", DeleteFencesNV);
+    //EXPORT_NAPI_METHOD("genFencesNV", GenFencesNV);
+    //EXPORT_NAPI_METHOD("isFenceNV", IsFenceNV);
+    //EXPORT_NAPI_METHOD("testFenceNV", TestFenceNV);
+    //EXPORT_NAPI_METHOD("getFenceivNV", GetFenceivNV);
+    //EXPORT_NAPI_METHOD("finishFenceNV", FinishFenceNV);
+    //EXPORT_NAPI_METHOD("setFenceNV", SetFenceNV);
+    //EXPORT_NAPI_METHOD("fragmentCoverageColorNV", FragmentCoverageColorNV);
+    //EXPORT_NAPI_METHOD("blitFramebufferNV", BlitFramebufferNV);
+    //EXPORT_NAPI_METHOD("coverageModulationTableNV", CoverageModulationTableNV);
+    //EXPORT_NAPI_METHOD("getCoverageModulationTableNV", GetCoverageModulationTableNV);
+    //EXPORT_NAPI_METHOD("coverageModulationNV", CoverageModulationNV);
+    //EXPORT_NAPI_METHOD("renderbufferStorageMultisampleNV", RenderbufferStorageMultisampleNV);
+    //EXPORT_NAPI_METHOD("uniform1i64NV", Uniform1i64NV);
+    //EXPORT_NAPI_METHOD("uniform2i64NV", Uniform2i64NV);
+    //EXPORT_NAPI_METHOD("uniform3i64NV", Uniform3i64NV);
+    //EXPORT_NAPI_METHOD("uniform4i64NV", Uniform4i64NV);
+    //EXPORT_NAPI_METHOD("uniform1i64vNV", Uniform1i64vNV);
+    //EXPORT_NAPI_METHOD("uniform2i64vNV", Uniform2i64vNV);
+    //EXPORT_NAPI_METHOD("uniform3i64vNV", Uniform3i64vNV);
+    //EXPORT_NAPI_METHOD("uniform4i64vNV", Uniform4i64vNV);
+    //EXPORT_NAPI_METHOD("uniform1ui64NV", Uniform1ui64NV);
+    //EXPORT_NAPI_METHOD("uniform2ui64NV", Uniform2ui64NV);
+    //EXPORT_NAPI_METHOD("uniform3ui64NV", Uniform3ui64NV);
+    //EXPORT_NAPI_METHOD("uniform4ui64NV", Uniform4ui64NV);
+    //EXPORT_NAPI_METHOD("uniform1ui64vNV", Uniform1ui64vNV);
+    //EXPORT_NAPI_METHOD("uniform2ui64vNV", Uniform2ui64vNV);
+    //EXPORT_NAPI_METHOD("uniform3ui64vNV", Uniform3ui64vNV);
+    //EXPORT_NAPI_METHOD("uniform4ui64vNV", Uniform4ui64vNV);
+    //EXPORT_NAPI_METHOD("getUniformi64vNV", GetUniformi64vNV);
+    //EXPORT_NAPI_METHOD("programUniform1i64NV", ProgramUniform1i64NV);
+    //EXPORT_NAPI_METHOD("programUniform2i64NV", ProgramUniform2i64NV);
+    //EXPORT_NAPI_METHOD("programUniform3i64NV", ProgramUniform3i64NV);
+    //EXPORT_NAPI_METHOD("programUniform4i64NV", ProgramUniform4i64NV);
+    //EXPORT_NAPI_METHOD("programUniform1i64vNV", ProgramUniform1i64vNV);
+    //EXPORT_NAPI_METHOD("programUniform2i64vNV", ProgramUniform2i64vNV);
+    //EXPORT_NAPI_METHOD("programUniform3i64vNV", ProgramUniform3i64vNV);
+    //EXPORT_NAPI_METHOD("programUniform4i64vNV", ProgramUniform4i64vNV);
+    //EXPORT_NAPI_METHOD("programUniform1ui64NV", ProgramUniform1ui64NV);
+    //EXPORT_NAPI_METHOD("programUniform2ui64NV", ProgramUniform2ui64NV);
+    //EXPORT_NAPI_METHOD("programUniform3ui64NV", ProgramUniform3ui64NV);
+    //EXPORT_NAPI_METHOD("programUniform4ui64NV", ProgramUniform4ui64NV);
+    //EXPORT_NAPI_METHOD("programUniform1ui64vNV", ProgramUniform1ui64vNV);
+    //EXPORT_NAPI_METHOD("programUniform2ui64vNV", ProgramUniform2ui64vNV);
+    //EXPORT_NAPI_METHOD("programUniform3ui64vNV", ProgramUniform3ui64vNV);
+    //EXPORT_NAPI_METHOD("programUniform4ui64vNV", ProgramUniform4ui64vNV);
+    //EXPORT_NAPI_METHOD("vertexAttribDivisorNV", VertexAttribDivisorNV);
+    //EXPORT_NAPI_METHOD("getInternalformatSampleivNV", GetInternalformatSampleivNV);
+    //EXPORT_NAPI_METHOD("uniformMatrix2x3fvNV", UniformMatrix2x3fvNV);
+    //EXPORT_NAPI_METHOD("uniformMatrix3x2fvNV", UniformMatrix3x2fvNV);
+    //EXPORT_NAPI_METHOD("uniformMatrix2x4fvNV", UniformMatrix2x4fvNV);
+    //EXPORT_NAPI_METHOD("uniformMatrix4x2fvNV", UniformMatrix4x2fvNV);
+    //EXPORT_NAPI_METHOD("uniformMatrix3x4fvNV", UniformMatrix3x4fvNV);
+    //EXPORT_NAPI_METHOD("uniformMatrix4x3fvNV", UniformMatrix4x3fvNV);
+    //EXPORT_NAPI_METHOD("genPathsNV", GenPathsNV);
+    //EXPORT_NAPI_METHOD("deletePathsNV", DeletePathsNV);
+    //EXPORT_NAPI_METHOD("isPathNV", IsPathNV);
+    //EXPORT_NAPI_METHOD("pathCommandsNV", PathCommandsNV);
+    //EXPORT_NAPI_METHOD("pathCoordsNV", PathCoordsNV);
+    //EXPORT_NAPI_METHOD("pathSubCommandsNV", PathSubCommandsNV);
+    //EXPORT_NAPI_METHOD("pathSubCoordsNV", PathSubCoordsNV);
+    //EXPORT_NAPI_METHOD("pathStringNV", PathStringNV);
+    //EXPORT_NAPI_METHOD("pathGlyphsNV", PathGlyphsNV);
+    //EXPORT_NAPI_METHOD("pathGlyphRangeNV", PathGlyphRangeNV);
+    //EXPORT_NAPI_METHOD("weightPathsNV", WeightPathsNV);
+    //EXPORT_NAPI_METHOD("copyPathNV", CopyPathNV);
+    //EXPORT_NAPI_METHOD("interpolatePathsNV", InterpolatePathsNV);
+    //EXPORT_NAPI_METHOD("transformPathNV", TransformPathNV);
+    //EXPORT_NAPI_METHOD("pathParameterivNV", PathParameterivNV);
+    //EXPORT_NAPI_METHOD("pathParameteriNV", PathParameteriNV);
+    //EXPORT_NAPI_METHOD("pathParameterfvNV", PathParameterfvNV);
+    //EXPORT_NAPI_METHOD("pathParameterfNV", PathParameterfNV);
+    //EXPORT_NAPI_METHOD("pathDashArrayNV", PathDashArrayNV);
+    //EXPORT_NAPI_METHOD("pathStencilFuncNV", PathStencilFuncNV);
+    //EXPORT_NAPI_METHOD("pathStencilDepthOffsetNV", PathStencilDepthOffsetNV);
+    //EXPORT_NAPI_METHOD("stencilFillPathNV", StencilFillPathNV);
+    //EXPORT_NAPI_METHOD("stencilStrokePathNV", StencilStrokePathNV);
+    //EXPORT_NAPI_METHOD("stencilFillPathInstancedNV", StencilFillPathInstancedNV);
+    //EXPORT_NAPI_METHOD("stencilStrokePathInstancedNV", StencilStrokePathInstancedNV);
+    //EXPORT_NAPI_METHOD("pathCoverDepthFuncNV", PathCoverDepthFuncNV);
+    //EXPORT_NAPI_METHOD("coverFillPathNV", CoverFillPathNV);
+    //EXPORT_NAPI_METHOD("coverStrokePathNV", CoverStrokePathNV);
+    //EXPORT_NAPI_METHOD("coverFillPathInstancedNV", CoverFillPathInstancedNV);
+    //EXPORT_NAPI_METHOD("coverStrokePathInstancedNV", CoverStrokePathInstancedNV);
+    //EXPORT_NAPI_METHOD("getPathParameterivNV", GetPathParameterivNV);
+    //EXPORT_NAPI_METHOD("getPathParameterfvNV", GetPathParameterfvNV);
+    //EXPORT_NAPI_METHOD("getPathCommandsNV", GetPathCommandsNV);
+    //EXPORT_NAPI_METHOD("getPathCoordsNV", GetPathCoordsNV);
+    //EXPORT_NAPI_METHOD("getPathDashArrayNV", GetPathDashArrayNV);
+    //EXPORT_NAPI_METHOD("getPathMetricsNV", GetPathMetricsNV);
+    //EXPORT_NAPI_METHOD("getPathMetricRangeNV", GetPathMetricRangeNV);
+    //EXPORT_NAPI_METHOD("getPathSpacingNV", GetPathSpacingNV);
+    //EXPORT_NAPI_METHOD("isPointInFillPathNV", IsPointInFillPathNV);
+    //EXPORT_NAPI_METHOD("isPointInStrokePathNV", IsPointInStrokePathNV);
+    //EXPORT_NAPI_METHOD("getPathLengthNV", GetPathLengthNV);
+    //EXPORT_NAPI_METHOD("pointAlongPathNV", PointAlongPathNV);
+    //EXPORT_NAPI_METHOD("matrixLoad3x2fNV", MatrixLoad3x2fNV);
+    //EXPORT_NAPI_METHOD("matrixLoad3x3fNV", MatrixLoad3x3fNV);
+    //EXPORT_NAPI_METHOD("matrixLoadTranspose3x3fNV", MatrixLoadTranspose3x3fNV);
+    //EXPORT_NAPI_METHOD("matrixMult3x2fNV", MatrixMult3x2fNV);
+    //EXPORT_NAPI_METHOD("matrixMult3x3fNV", MatrixMult3x3fNV);
+    //EXPORT_NAPI_METHOD("matrixMultTranspose3x3fNV", MatrixMultTranspose3x3fNV);
+    //EXPORT_NAPI_METHOD("stencilThenCoverFillPathNV", StencilThenCoverFillPathNV);
+    //EXPORT_NAPI_METHOD("stencilThenCoverStrokePathNV", StencilThenCoverStrokePathNV);
+    //EXPORT_NAPI_METHOD("stencilThenCoverFillPathInstancedNV", StencilThenCoverFillPathInstancedNV);
+    //EXPORT_NAPI_METHOD("stencilThenCoverStrokePathInstancedNV", StencilThenCoverStrokePathInstancedNV);
+    //EXPORT_NAPI_METHOD("pathGlyphIndexRangeNV", PathGlyphIndexRangeNV);
+    //EXPORT_NAPI_METHOD("pathGlyphIndexArrayNV", PathGlyphIndexArrayNV);
+    //EXPORT_NAPI_METHOD("pathMemoryGlyphIndexArrayNV", PathMemoryGlyphIndexArrayNV);
+    //EXPORT_NAPI_METHOD("programPathFragmentInputGenNV", ProgramPathFragmentInputGenNV);
+    //EXPORT_NAPI_METHOD("getProgramResourcefvNV", GetProgramResourcefvNV);
+    //EXPORT_NAPI_METHOD("pathColorGenNV", PathColorGenNV);
+    //EXPORT_NAPI_METHOD("pathTexGenNV", PathTexGenNV);
+    //EXPORT_NAPI_METHOD("pathFogGenNV", PathFogGenNV);
+    //EXPORT_NAPI_METHOD("getPathColorGenivNV", GetPathColorGenivNV);
+    //EXPORT_NAPI_METHOD("getPathColorGenfvNV", GetPathColorGenfvNV);
+    //EXPORT_NAPI_METHOD("getPathTexGenivNV", GetPathTexGenivNV);
+    //EXPORT_NAPI_METHOD("getPathTexGenfvNV", GetPathTexGenfvNV);
+    //EXPORT_NAPI_METHOD("polygonModeNV", PolygonModeNV);
+    //EXPORT_NAPI_METHOD("readBufferNV", ReadBufferNV);
+    //EXPORT_NAPI_METHOD("framebufferSampleLocationsfvNV", FramebufferSampleLocationsfvNV);
+    //EXPORT_NAPI_METHOD("namedFramebufferSampleLocationsfvNV", NamedFramebufferSampleLocationsfvNV);
+    //EXPORT_NAPI_METHOD("resolveDepthValuesNV", ResolveDepthValuesNV);
+    //EXPORT_NAPI_METHOD("viewportArrayvNV", ViewportArrayvNV);
+    //EXPORT_NAPI_METHOD("viewportIndexedfNV", ViewportIndexedfNV);
+    //EXPORT_NAPI_METHOD("viewportIndexedfvNV", ViewportIndexedfvNV);
+    //EXPORT_NAPI_METHOD("scissorArrayvNV", ScissorArrayvNV);
+    //EXPORT_NAPI_METHOD("scissorIndexedNV", ScissorIndexedNV);
+    //EXPORT_NAPI_METHOD("scissorIndexedvNV", ScissorIndexedvNV);
+    //EXPORT_NAPI_METHOD("depthRangeArrayfvNV", DepthRangeArrayfvNV);
+    //EXPORT_NAPI_METHOD("depthRangeIndexedfNV", DepthRangeIndexedfNV);
+    //EXPORT_NAPI_METHOD("getFloati_vNV", GetFloati_vNV);
+    //EXPORT_NAPI_METHOD("enableiNV", EnableiNV);
+    //EXPORT_NAPI_METHOD("disableiNV", DisableiNV);
+    //EXPORT_NAPI_METHOD("isEnablediNV", IsEnablediNV);
+    //EXPORT_NAPI_METHOD("viewportSwizzleNV", ViewportSwizzleNV);
+
+    // ext OES
+    //EXPORT_NAPI_METHOD("EGLImageTargetTexture2DOES", EGLImageTargetTexture2DOES);
+    //EXPORT_NAPI_METHOD("EGLImageTargetRenderbufferStorageOES", EGLImageTargetRenderbufferStorageOES);
+    //EXPORT_NAPI_METHOD("copyImageSubDataOES", CopyImageSubDataOES);
+    //EXPORT_NAPI_METHOD("enableiOES", EnableiOES);
+    //EXPORT_NAPI_METHOD("disableiOES", DisableiOES);
+    //EXPORT_NAPI_METHOD("blendEquationiOES", BlendEquationiOES);
+    //EXPORT_NAPI_METHOD("blendEquationSeparateiOES", BlendEquationSeparateiOES);
+    //EXPORT_NAPI_METHOD("blendFunciOES", BlendFunciOES);
+    //EXPORT_NAPI_METHOD("blendFuncSeparateiOES", BlendFuncSeparateiOES);
+    //EXPORT_NAPI_METHOD("colorMaskiOES", ColorMaskiOES);
+    //EXPORT_NAPI_METHOD("isEnablediOES", IsEnablediOES);
+    //EXPORT_NAPI_METHOD("drawElementsBaseVertexOES", DrawElementsBaseVertexOES);
+    //EXPORT_NAPI_METHOD("drawRangeElementsBaseVertexOES", DrawRangeElementsBaseVertexOES);
+    //EXPORT_NAPI_METHOD("drawElementsInstancedBaseVertexOES", DrawElementsInstancedBaseVertexOES);
+    //EXPORT_NAPI_METHOD("multiDrawElementsBaseVertexOES", MultiDrawElementsBaseVertexOES);
+    //EXPORT_NAPI_METHOD("framebufferTextureOES", FramebufferTextureOES);
+    //EXPORT_NAPI_METHOD("getProgramBinaryOES", GetProgramBinaryOES);
+    //EXPORT_NAPI_METHOD("programBinaryOES", ProgramBinaryOES);
+    //EXPORT_NAPI_METHOD("mapBufferOES", MapBufferOES);
+    //EXPORT_NAPI_METHOD("unmapBufferOES", UnmapBufferOES);
+    //EXPORT_NAPI_METHOD("getBufferPointervOES", GetBufferPointervOES);
+    //EXPORT_NAPI_METHOD("primitiveBoundingBoxOES", PrimitiveBoundingBoxOES);
+    //EXPORT_NAPI_METHOD("minSampleShadingOES", MinSampleShadingOES);
+    //EXPORT_NAPI_METHOD("patchParameteriOES", PatchParameteriOES);
+    //EXPORT_NAPI_METHOD("texImage3DOES", TexImage3DOES);
+    //EXPORT_NAPI_METHOD("texSubImage3DOES", TexSubImage3DOES);
+    //EXPORT_NAPI_METHOD("copyTexSubImage3DOES", CopyTexSubImage3DOES);
+    //EXPORT_NAPI_METHOD("compressedTexImage3DOES", CompressedTexImage3DOES);
+    //EXPORT_NAPI_METHOD("compressedTexSubImage3DOES", CompressedTexSubImage3DOES);
+    //EXPORT_NAPI_METHOD("framebufferTexture3DOES", FramebufferTexture3DOES);
+    //EXPORT_NAPI_METHOD("texParameterIivOES", TexParameterIivOES);
+    //EXPORT_NAPI_METHOD("texParameterIuivOES", TexParameterIuivOES);
+    //EXPORT_NAPI_METHOD("getTexParameterIivOES", GetTexParameterIivOES);
+    //EXPORT_NAPI_METHOD("getTexParameterIuivOES", GetTexParameterIuivOES);
+    //EXPORT_NAPI_METHOD("samplerParameterIivOES", SamplerParameterIivOES);
+    //EXPORT_NAPI_METHOD("samplerParameterIuivOES", SamplerParameterIuivOES);
+    //EXPORT_NAPI_METHOD("getSamplerParameterIivOES", GetSamplerParameterIivOES);
+    //EXPORT_NAPI_METHOD("getSamplerParameterIuivOES", GetSamplerParameterIuivOES);
+    //EXPORT_NAPI_METHOD("texBufferOES", TexBufferOES);
+    //EXPORT_NAPI_METHOD("texBufferRangeOES", TexBufferRangeOES);
+    //EXPORT_NAPI_METHOD("texStorage3DMultisampleOES", TexStorage3DMultisampleOES);
+    //EXPORT_NAPI_METHOD("textureViewOES", TextureViewOES);
+    //EXPORT_NAPI_METHOD("bindVertexArrayOES", BindVertexArrayOES);
+    //EXPORT_NAPI_METHOD("deleteVertexArraysOES", DeleteVertexArraysOES);
+    //EXPORT_NAPI_METHOD("genVertexArraysOES", GenVertexArraysOES);
+    //EXPORT_NAPI_METHOD("isVertexArrayOES", IsVertexArrayOES);
+    //EXPORT_NAPI_METHOD("viewportArrayvOES", ViewportArrayvOES);
+    //EXPORT_NAPI_METHOD("viewportIndexedfOES", ViewportIndexedfOES);
+    //EXPORT_NAPI_METHOD("viewportIndexedfvOES", ViewportIndexedfvOES);
+    //EXPORT_NAPI_METHOD("scissorArrayvOES", ScissorArrayvOES);
+    //EXPORT_NAPI_METHOD("scissorIndexedOES", ScissorIndexedOES);
+    //EXPORT_NAPI_METHOD("scissorIndexedvOES", ScissorIndexedvOES);
+    //EXPORT_NAPI_METHOD("depthRangeArrayfvOES", DepthRangeArrayfvOES);
+    //EXPORT_NAPI_METHOD("depthRangeIndexedfOES", DepthRangeIndexedfOES);
+    //EXPORT_NAPI_METHOD("getFloati_vOES", GetFloati_vOES);
+
+    // ext OVR
+    //EXPORT_NAPI_METHOD("framebufferTextureMultiviewOVR", FramebufferTextureMultiviewOVR);
+    //EXPORT_NAPI_METHOD("framebufferTextureMultisampleMultiviewOVR", FramebufferTextureMultisampleMultiviewOVR);
+
+    // ext QCOM
+    //EXPORT_NAPI_METHOD("alphaFuncQCOM", AlphaFuncQCOM);
+    //EXPORT_NAPI_METHOD("getDriverControlsQCOM", GetDriverControlsQCOM);
+    //EXPORT_NAPI_METHOD("getDriverControlStringQCOM", GetDriverControlStringQCOM);
+    //EXPORT_NAPI_METHOD("enableDriverControlQCOM", EnableDriverControlQCOM);
+    //EXPORT_NAPI_METHOD("disableDriverControlQCOM", DisableDriverControlQCOM);
+    //EXPORT_NAPI_METHOD("extGetTexturesQCOM", ExtGetTexturesQCOM);
+    //EXPORT_NAPI_METHOD("extGetBuffersQCOM", ExtGetBuffersQCOM);
+    //EXPORT_NAPI_METHOD("extGetRenderbuffersQCOM", ExtGetRenderbuffersQCOM);
+    //EXPORT_NAPI_METHOD("extGetFramebuffersQCOM", ExtGetFramebuffersQCOM);
+    //EXPORT_NAPI_METHOD("extGetTexLevelParameterivQCOM", ExtGetTexLevelParameterivQCOM);
+    //EXPORT_NAPI_METHOD("extTexObjectStateOverrideiQCOM", ExtTexObjectStateOverrideiQCOM);
+    //EXPORT_NAPI_METHOD("extGetTexSubImageQCOM", ExtGetTexSubImageQCOM);
+    //EXPORT_NAPI_METHOD("extGetBufferPointervQCOM", ExtGetBufferPointervQCOM);
+    //EXPORT_NAPI_METHOD("extGetShadersQCOM", ExtGetShadersQCOM);
+    //EXPORT_NAPI_METHOD("extGetProgramsQCOM", ExtGetProgramsQCOM);
+    //EXPORT_NAPI_METHOD("extIsProgramBinaryQCOM", ExtIsProgramBinaryQCOM);
+    //EXPORT_NAPI_METHOD("extGetProgramBinarySourceQCOM", ExtGetProgramBinarySourceQCOM);
+    //EXPORT_NAPI_METHOD("framebufferFoveationConfigQCOM", FramebufferFoveationConfigQCOM);
+    //EXPORT_NAPI_METHOD("framebufferFoveationParametersQCOM", FramebufferFoveationParametersQCOM);
+    //EXPORT_NAPI_METHOD("framebufferFetchBarrierQCOM", FramebufferFetchBarrierQCOM);
+    //EXPORT_NAPI_METHOD("startTilingQCOM", StartTilingQCOM);
+    //EXPORT_NAPI_METHOD("endTilingQCOM", EndTilingQCOM);
 
     // consts
     EXPORT_NAPI_CONST_GL(DEPTH_BUFFER_BIT);
