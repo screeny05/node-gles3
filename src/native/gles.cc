@@ -103,21 +103,21 @@ DECLARE_NAPI_METHOD(BlendEquationSeparate){
 
 DECLARE_NAPI_METHOD(BlendFunc){
     GET_NAPI_PARAMS_INFO(2);
-    GET_NAPI_PARAM_GLENUM(sfactor, 0);
-    GET_NAPI_PARAM_GLENUM(dfactor, 1);
+    GET_NAPI_PARAM_GLENUM(srcFactor, 0);
+    GET_NAPI_PARAM_GLENUM(destFactor, 1);
 
-    glBlendFunc(sfactor, dfactor);
+    glBlendFunc(srcFactor, destFactor);
     RETURN_NAPI_UNDEFINED();
 }
 
 DECLARE_NAPI_METHOD(BlendFuncSeparate){
     GET_NAPI_PARAMS_INFO(4);
-    GET_NAPI_PARAM_GLENUM(sfactorRGB, 0);
-    GET_NAPI_PARAM_GLENUM(dfactorRGB, 1);
-    GET_NAPI_PARAM_GLENUM(sfactorAlpha, 0);
-    GET_NAPI_PARAM_GLENUM(dfactorAlpha, 1);
+    GET_NAPI_PARAM_GLENUM(srcFactorRGB, 0);
+    GET_NAPI_PARAM_GLENUM(destFactorRGB, 1);
+    GET_NAPI_PARAM_GLENUM(srcFactorAlpha, 0);
+    GET_NAPI_PARAM_GLENUM(destFactorAlpha, 1);
 
-    glBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+    glBlendFuncSeparate(srcFactorRGB, destFactorRGB, srcFactorAlpha, destFactorAlpha);
     RETURN_NAPI_UNDEFINED();
 }
 
@@ -398,10 +398,10 @@ DECLARE_NAPI_METHOD(DepthMask){
 
 DECLARE_NAPI_METHOD(DepthRangef){
     GET_NAPI_PARAMS_INFO(2);
-    GET_NAPI_PARAM_DOUBLE(n, 0);
-    GET_NAPI_PARAM_DOUBLE(f, 1);
+    GET_NAPI_PARAM_DOUBLE(near, 0);
+    GET_NAPI_PARAM_DOUBLE(far, 1);
 
-    glDepthRangef(n, f);
+    glDepthRangef(near, far);
     RETURN_NAPI_UNDEFINED();
 }
 

@@ -1,18 +1,21 @@
 {
   "name": "node-gles3",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
   "dependencies": {
     "bindings": "^1.2.1"
   },
   "devDependencies": {
-    "@types/node": "^7.0.27"
+    "@types/node": "^7.0.27",
+    "dts-generator": "^2.1.0",
+    "typescript": "^2.3.4"
   },
   "scripts": {
-    "build": "tsc && node-gyp build",
+    "build": "node-gyp build && tsc",
     "start": "node --napi-modules ."
   },
+  "types": "./types/index.d.ts",
   "gypfile": true,
   "author": "Sebastian Langer <sl@scn.cx>",
   "license": "MIT"

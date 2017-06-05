@@ -2,7 +2,7 @@ import { rawGlfw, rawGles } from '.';
 
 import * as EventEmitter from 'events';
 
-interface Options {
+export interface Options {
     width: number;
     height: number;
     title: string;
@@ -18,7 +18,7 @@ export class NativeWindow extends EventEmitter {
     };
 
     glfw: any;
-    gl: WebGLRenderingContext;
+    gl: GLESRenderingContext;
     handle: number;
 
     _width: number;
@@ -76,7 +76,7 @@ export class NativeWindow extends EventEmitter {
         this.fbHeight = fbSize.height;
     }
 
-    onNewListener(event, listener){
+    onNewListener(event: string): void {
         if(event === 'mousemove' && !this.isListenerAddedCursorPos){
             this.isListenerAddedCursorPos = true;
             return this.glfw.setCursorPosCallback(this.handle, this.onMousemove.bind(this));
@@ -93,31 +93,31 @@ export class NativeWindow extends EventEmitter {
         }
     }
 
-    onFramebufferSize(handle, width, height){
+    onFramebufferSize(handle, width, height): void {
         if(handle !== this.handle){ return; }
         this.fbWidth = width;
         this.fbHeight = height;
         this.emit('framebufferResize');
     }
 
-    onWindowSize(handle, width, height){
+    onWindowSize(handle, width, height): void {
         if(handle !== this.handle){ return; }
         this._width = width;
         this._height = height;
         this.emit('resize');
     }
 
-    onWindowClose(handle){
+    onWindowClose(handle): void {
         if(handle !== this.handle){ return; }
         this.close();
     }
 
-    onMousemove(handle, x, y){
+    onMousemove(handle, x, y): void {
         if(handle !== this.handle){ return; }
         this.emit('mousemove', { x, y });
     }
 
-    onKey(handle, key, scancode, action, modes){
+    onKey(handle, key, scancode, action, modes): void {
         if(handle !== this.handle){ return; }
         const data = { key, scancode, action, modes };
         this.emit('key', data);
@@ -129,7 +129,7 @@ export class NativeWindow extends EventEmitter {
         }
     }
 
-    onMouseButton(handle, button, action, mods){
+    onMouseButton(handle, button, action, mods): void {
         if(handle !== this.handle){ return; }
         const data = { handle, button, action, mods };
         this.emit('mousebutton', data);
@@ -141,21 +141,20 @@ export class NativeWindow extends EventEmitter {
         }
     }
 
-    close(){
+    close(): void {
         this.isOpen = false;
         this.emit('close');
         this.glfw.destroyWindow(this.handle);
     }
 
-    makeContextCurrent(){
+    makeContextCurrent(): void {
         this.glfw.makeContextCurrent(this.handle);
     }
 
-    requestFrame(cb){
+    requestFrame(cb: (time: number) => void): void {
         if(!this.isOpen){
             return;
         }
-
 
         setImmediate(() => {
             const time = this.glfw.getTime();
@@ -167,7 +166,7 @@ export class NativeWindow extends EventEmitter {
         });
     }
 
-    setSize(width, height){
+    setSize(width, height): void {
         this.glfw.setWindowSize(this.handle, width, height);
         this._width = width;
         this._height = height;
@@ -199,7 +198,3 @@ export class NativeWindow extends EventEmitter {
         this._height = height;
     }
 }
-
-// following events have to get implemented:
-// * resize
-// * mousedown

@@ -1,11 +1,11 @@
 import * as bindings from 'bindings';
 
-const rawGlfw = bindings('glfw');
-const rawGles = bindings('gles');
+const rawGlfw: any = bindings('glfw');
+const rawGles: GLESRenderingContext = bindings('gles');
 
 // hide both from the console
 rawGlfw.inspect = (depth, options) => options.stylize('[object GLFW]', 'special');
-rawGles.inspect = (depth, options) => options.stylize('[object GLES]', 'special');
+(<any>rawGles).inspect = (depth, options) => options.stylize('[object GLES]', 'special');
 
 // make sure we don't init more than once
 rawGlfw.isInitialized = false;

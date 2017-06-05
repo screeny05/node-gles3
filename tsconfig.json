@@ -8,14 +8,13 @@
         "typeRoots": ["node_modules/@types"],
         "rootDir": "src",
         "outDir": "dist",
-        "allowJs": true,
-        "checkJs": true,
         "alwaysStrict": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
         "strictNullChecks": true,
         "sourceMap": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "declarationDir": "types"
     },
     "exclude": [
         "node_modules",
