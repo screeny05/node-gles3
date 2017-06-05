@@ -88,6 +88,43 @@
         NAPI_CALL(env, napi_get_arraybuffer_info(env, args[i], &name, &byteLength_##name)); \
     }
 
+#define GET_NAPI_PARAM_TYPED_ARRAY(name, i, cType, napiType, readableType) \
+    size_t byteLength_##name; \
+    void* name; \
+    bool isTypedArray_##name; \
+    napi_typedarray_type arrayType_##name; \
+    size_t length_##name; \
+    NAPI_CALL(env, napi_is_typedarray(env, args[i], &isTypedArray_##name)); \
+    NAPI_ASSERT(env, isTypedArray_##name, "Expected argument " #name "(" #i ") to be of type " #readableType); \
+    napi_value bufferValue_##name; \
+    NAPI_CALL(env, napi_get_typedarray_info(env, args[i], &arrayType_##name, &length_##name, NULL, &bufferValue_##name, NULL)); \
+    NAPI_ASSERT(env, arrayType_##name == napiType, "Expected argument " #name "(" #i ") to be of type " #readableType); \
+    NAPI_CALL(env, napi_get_arraybuffer_info(env, bufferValue_##name, &name, &byteLength_##name));
+
+#define GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(name, i) GET_NAPI_PARAM_TYPED_ARRAY(name, i, float, napi_float32_array, "Float32Array");
+#define GET_NAPI_PARAM_TYPED_ARRAY_FLOAT64(name, i) GET_NAPI_PARAM_TYPED_ARRAY(name, i, double, napi_float64_array, "Float64Array");
+#define GET_NAPI_PARAM_TYPED_ARRAY_INT32(name, i) GET_NAPI_PARAM_TYPED_ARRAY(name, i, int32_t, napi_int32_array, "Int32Array");
+
+
+#define GET_NAPI_PARAM_ARRAY_BASE(name, i, cType, orgType, napiGetCall, readableType) \
+    bool isArray_##name; \
+    NAPI_CALL(env, napi_typeof(env, args[i], &valuetype)); \
+    NAPI_CALL(env, napi_is_array(env, args[i], &isArray_##name)); \
+    NAPI_ASSERT(env, valuetype == napi_object && isArray_##name, "Expected argument " #name "(" #i ") to be of type array<" readableType ">"); \
+    uint32_t length_##name; \
+    NAPI_CALL(env, napi_get_array_length(env, args[i], &length_##name)); \
+    cType name[length_##name]; \
+    napi_value singleValue_##name; \
+    orgType single_##name; \
+    for(uint32_t _i = 0; _i < length_##name; _i++){ \
+        NAPI_CALL(env, napi_get_element(env, args[i], _i, &singleValue_##name)); \
+        NAPI_CALL(env, napiGetCall(env, singleValue_##name, &single_##name)); \
+        name[_i] = (cType)single_##name; \
+    }
+
+#define GET_NAPI_PARAM_ARRAY_INT32(name, i) GET_NAPI_PARAM_ARRAY_BASE(name, i, int32_t, int32_t, napi_get_value_int32, "number");
+#define GET_NAPI_PARAM_ARRAY_DOUBLE(name, i) GET_NAPI_PARAM_ARRAY_BASE(name, i, double, double, napi_get_value_double, "number");
+#define GET_NAPI_PARAM_ARRAY_FLOAT(name, i) GET_NAPI_PARAM_ARRAY_BASE(name, i, float, double, napi_get_value_double, "number");
 
 #define GET_NAPI_PARAM_INT64(name, i) GET_NAPI_PARAM_BASE(name, i, napi_number, int64_t, napi_get_value_int64, "number");
 #define GET_NAPI_PARAM_INT32(name, i) GET_NAPI_PARAM_BASE(name, i, napi_number, int32_t, napi_get_value_int32, "number");

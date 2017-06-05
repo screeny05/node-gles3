@@ -1,3 +1,4 @@
+#include <iostream>
 #include <node_api.h>
 
 #define GLFW_INCLUDE_NONE
@@ -929,10 +930,186 @@ DECLARE_NAPI_METHOD(RenderbufferStorage){
     RETURN_NAPI_UNDEFINED();
 }
 
+DECLARE_NAPI_METHOD(SampleCoverage){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_GLENUM(value, 0);
+    GET_NAPI_PARAM_BOOL(invert, 1);
 
+    glSampleCoverage(value, invert);
+    RETURN_NAPI_UNDEFINED();
+}
 
+DECLARE_NAPI_METHOD(Scissor){
+    GET_NAPI_PARAMS_INFO(4);
+    GET_NAPI_PARAM_INT32(x, 0);
+    GET_NAPI_PARAM_INT32(y, 1);
+    GET_NAPI_PARAM_INT32(width, 2);
+    GET_NAPI_PARAM_INT32(height, 3);
 
+    glScissor(x, y, width, height);
+    RETURN_NAPI_UNDEFINED();
+}
 
+// WEBGL1-COMPAT
+DECLARE_NAPI_METHOD(ShaderSource){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(shader, 0);
+    GET_NAPI_PARAM_STRING(code, 1);
+
+    const char* codes[1];
+    codes[0] = code;
+    GLint length = bufferSize_code;
+    glShaderSource(shader, 1, codes, &length);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(StencilFunc){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_GLENUM(func, 0);
+    GET_NAPI_PARAM_INT32(ref, 1);
+    GET_NAPI_PARAM_UINT32(mask, 2);
+
+    glStencilFunc(func, ref, mask);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(StencilFuncSeparate){
+    GET_NAPI_PARAMS_INFO(4);
+    GET_NAPI_PARAM_GLENUM(face, 0);
+    GET_NAPI_PARAM_GLENUM(func, 1);
+    GET_NAPI_PARAM_INT32(ref, 2);
+    GET_NAPI_PARAM_UINT32(mask, 3);
+
+    glStencilFuncSeparate(face, func, ref, mask);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(StencilMask){
+    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAM_UINT32(mask, 0);
+
+    glStencilMask(mask);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(StencilMaskSeparate){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_GLENUM(face, 0);
+    GET_NAPI_PARAM_UINT32(mask, 1);
+
+    glStencilMaskSeparate(face, mask);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(StencilOp){
+    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAM_GLENUM(fail, 0);
+    GET_NAPI_PARAM_GLENUM(zfail, 1);
+    GET_NAPI_PARAM_GLENUM(zpass, 2);
+
+    glStencilOp(fail, zfail, zpass);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(StencilOpSeparate){
+    GET_NAPI_PARAMS_INFO(4);
+    GET_NAPI_PARAM_GLENUM(face, 0);
+    GET_NAPI_PARAM_GLENUM(sfail, 1);
+    GET_NAPI_PARAM_GLENUM(dpfail, 2);
+    GET_NAPI_PARAM_GLENUM(dppass, 3);
+
+    glStencilOpSeparate(face, sfail, dpfail, dppass);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(TexImage2D){
+    GET_NAPI_PARAMS_INFO(9);
+    GET_NAPI_PARAM_GLENUM(target, 0);
+    GET_NAPI_PARAM_INT32(level, 1);
+    GET_NAPI_PARAM_INT32(internalformat, 2);
+    GET_NAPI_PARAM_INT32(width, 3);
+    GET_NAPI_PARAM_INT32(height, 4);
+    GET_NAPI_PARAM_INT32(border, 5);
+    GET_NAPI_PARAM_GLENUM(format, 6);
+    GET_NAPI_PARAM_GLENUM(type, 7);
+    GET_NAPI_PARAM_ARRAY_BUFFER(pixels, 8);
+
+    glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(TexParameterf){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_GLENUM(target, 0);
+    GET_NAPI_PARAM_GLENUM(pname, 1);
+    GET_NAPI_PARAM_DOUBLE(param, 2);
+
+    glTexParameterf(target, pname, param);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(TexParameteri){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_GLENUM(target, 0);
+    GET_NAPI_PARAM_GLENUM(pname, 1);
+    GET_NAPI_PARAM_INT32(param, 2);
+
+    glTexParameteri(target, pname, param);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(TexSubImage2D){
+    GET_NAPI_PARAMS_INFO(9);
+    GET_NAPI_PARAM_GLENUM(target, 0);
+    GET_NAPI_PARAM_INT32(level, 1);
+    GET_NAPI_PARAM_INT32(xoffset, 2);
+    GET_NAPI_PARAM_INT32(yoffset, 3);
+    GET_NAPI_PARAM_INT32(width, 4);
+    GET_NAPI_PARAM_INT32(height, 5);
+    GET_NAPI_PARAM_GLENUM(format, 6);
+    GET_NAPI_PARAM_GLENUM(type, 7);
+    GET_NAPI_PARAM_ARRAY_BUFFER(pixels, 8);
+
+    glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(Uniform1f){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_DOUBLE(v0, 1);
+
+    glUniform1f(location, v0);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(Uniform1fv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_FLOAT32(values, 1);
+
+    glUniform1fv(location, length_values, (float*)values);
+
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(Uniform1i){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_INT32(v0, 1);
+
+    glUniform1i(location, v0);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(Uniform1iv){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(location, 0);
+    GET_NAPI_PARAM_TYPED_ARRAY_INT32(values, 1);
+
+    glUniform1iv(location, length_values, (int32_t*)values);
+    RETURN_NAPI_UNDEFINED();
+}
 
 
 
@@ -1057,28 +1234,28 @@ void _ModuleInit(napi_env env, napi_value exports, napi_value module, void* priv
     EXPORT_NAPI_METHOD("releaseShaderCompiler", ReleaseShaderCompiler);
     EXPORT_NAPI_METHOD("renderbufferStorage", RenderbufferStorage);
 
-    //EXPORT_NAPI_METHOD("sampleCoverage", SampleCoverage);
-    //EXPORT_NAPI_METHOD("scissor", Scissor);
-    //EXPORT_NAPI_METHOD("shaderBinary", ShaderBinary);
-    //EXPORT_NAPI_METHOD("shaderSource", ShaderSource);
-    //EXPORT_NAPI_METHOD("stencilFunc", StencilFunc);
-    //EXPORT_NAPI_METHOD("stencilFuncSeparate", StencilFuncSeparate);
-    //EXPORT_NAPI_METHOD("stencilMask", StencilMask);
-    //EXPORT_NAPI_METHOD("stencilMaskSeparate", StencilMaskSeparate);
-    //EXPORT_NAPI_METHOD("stencilOp", StencilOp);
-    //EXPORT_NAPI_METHOD("stencilOpSeparate", StencilOpSeparate);
+    EXPORT_NAPI_METHOD("sampleCoverage", SampleCoverage);
+    EXPORT_NAPI_METHOD("scissor", Scissor);
+    //#EXPORT_NAPI_METHOD("shaderBinary", ShaderBinary); - needed?
+    EXPORT_NAPI_METHOD("shaderSource", ShaderSource);
+    EXPORT_NAPI_METHOD("stencilFunc", StencilFunc);
+    EXPORT_NAPI_METHOD("stencilFuncSeparate", StencilFuncSeparate);
+    EXPORT_NAPI_METHOD("stencilMask", StencilMask);
+    EXPORT_NAPI_METHOD("stencilMaskSeparate", StencilMaskSeparate);
+    EXPORT_NAPI_METHOD("stencilOp", StencilOp);
+    EXPORT_NAPI_METHOD("stencilOpSeparate", StencilOpSeparate);
 
-    //EXPORT_NAPI_METHOD("texImage2D", TexImage2D);
-    //EXPORT_NAPI_METHOD("texParameterf", TexParameterf);
-    //EXPORT_NAPI_METHOD("texParameterfv", TexParameterfv);
-    //EXPORT_NAPI_METHOD("texParameteri", TexParameteri);
-    //EXPORT_NAPI_METHOD("texParameteriv", TexParameteriv);
-    //EXPORT_NAPI_METHOD("texSubImage2D", TexSubImage2D);
+    EXPORT_NAPI_METHOD("texImage2D", TexImage2D);
+    EXPORT_NAPI_METHOD("texParameterf", TexParameterf);
+    //#EXPORT_NAPI_METHOD("texParameterfv", TexParameterfv); - needed?
+    EXPORT_NAPI_METHOD("texParameteri", TexParameteri);
+    //#EXPORT_NAPI_METHOD("texParameteriv", TexParameteriv); - needed?
+    EXPORT_NAPI_METHOD("texSubImage2D", TexSubImage2D);
 
-    //EXPORT_NAPI_METHOD("uniform1f", Uniform1f);
-    //EXPORT_NAPI_METHOD("uniform1fv", Uniform1fv);
-    //EXPORT_NAPI_METHOD("uniform1i", Uniform1i);
-    //EXPORT_NAPI_METHOD("uniform1iv", Uniform1iv);
+    EXPORT_NAPI_METHOD("uniform1f", Uniform1f);
+    EXPORT_NAPI_METHOD("uniform1fv", Uniform1fv);
+    EXPORT_NAPI_METHOD("uniform1i", Uniform1i);
+    EXPORT_NAPI_METHOD("uniform1iv", Uniform1iv);
     //EXPORT_NAPI_METHOD("uniform2f", Uniform2f);
     //EXPORT_NAPI_METHOD("uniform2fv", Uniform2fv);
     //EXPORT_NAPI_METHOD("uniform2i", Uniform2i);

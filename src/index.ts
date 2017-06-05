@@ -55,4 +55,6 @@ rawGles.compressedTexImage2D(rawGles.TEXTURE_2D, 0, 0, 1, 1, 0, new Uint8Array([
 console.log(rawGles.getActiveAttrib(0, 0))
 console.log('isShader', rawGles.isShader(0));
 
+rawGles.uniform1fv(123, new Float32Array([12,123,12312,213213.123,12.312,.312,3.123,1.23,2]))
+
 frame();
