@@ -29,6 +29,16 @@
     NAPI_CALL(env, napi_set_named_property(env, returnValue, "type", val)); \
     return returnValue;
 
+#define RETURN_NAPI_2NUMBER_OBJECT(a, b) \
+    napi_value val; \
+    napi_value returnValue; \
+    NAPI_CALL(env, napi_create_object(env, &returnValue)); \
+    NAPI_CALL(env, napi_create_number(env, a, &val)); \
+    NAPI_CALL(env, napi_set_named_property(env, returnValue, #a, val)); \
+    NAPI_CALL(env, napi_create_number(env, b, &val)); \
+    NAPI_CALL(env, napi_set_named_property(env, returnValue, #b, val)); \
+    return returnValue;
+
 #define RETURN_NAPI_ARRAY_NUMBER(array, count) \
     napi_value arrayValue; \
     napi_value singleValue; \
@@ -57,6 +67,16 @@
     NAPI_ASSERT(env, valuetype == napiType, "Expected argument " #name "(" #i ") to be of type " readableType "."); \
     cType name; \
     NAPI_CALL(env, napiGetCall(env, args[i], &name));
+
+#define GET_NAPI_PARAM_BASE_NULLABLE(name, i, napiType, cType, napiGetCall, readableType, defaultValue) \
+    NAPI_CALL(env, napi_typeof(env, args[i], &valuetype)); \
+    NAPI_ASSERT(env, valuetype == napiType || valuetype == napi_null, "Expected argument " #name "(" #i ") to be of type " readableType " or null."); \
+    cType name; \
+    if(valuetype == napi_null){ \
+        name = defaultValue; \
+    } else { \
+        NAPI_CALL(env, napiGetCall(env, args[i], &name)); \
+    }
 
 #define GET_NAPI_PARAM_STRING(name, i) \
     NAPI_CALL(env, napi_typeof(env, args[i], &valuetype)); \
@@ -121,6 +141,8 @@
         NAPI_CALL(env, napiGetCall(env, singleValue_##name, &single_##name)); \
         name[_i] = (cType)single_##name; \
     }
+
+#define GET_NAPI_PARAM_GLENUM_NULLABLE(name, i) GET_NAPI_PARAM_BASE_NULLABLE(name, i, napi_number, uint32_t, napi_get_value_uint32, "number", 0);
 
 #define GET_NAPI_PARAM_ARRAY_INT32(name, i) GET_NAPI_PARAM_ARRAY_BASE(name, i, int32_t, int32_t, napi_get_value_int32, "number");
 #define GET_NAPI_PARAM_ARRAY_DOUBLE(name, i) GET_NAPI_PARAM_ARRAY_BASE(name, i, double, double, napi_get_value_double, "number");

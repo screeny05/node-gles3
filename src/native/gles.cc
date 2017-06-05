@@ -67,7 +67,7 @@ DECLARE_NAPI_METHOD(BindRenderbuffer){
 DECLARE_NAPI_METHOD(BindTexture){
     GET_NAPI_PARAMS_INFO(2);
     GET_NAPI_PARAM_GLENUM(target, 0);
-    GET_NAPI_PARAM_GLENUM(texture, 1);
+    GET_NAPI_PARAM_GLENUM_NULLABLE(texture, 1);
 
     glBindTexture(target, texture);
     RETURN_NAPI_UNDEFINED();

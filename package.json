@@ -1,12 +1,14 @@
 {
-  "name": "native-playground",
+  "name": "node-gles3",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "dependencies": {
     "bindings": "^1.2.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^7.0.27"
+  },
   "scripts": {
     "build": "tsc && node-gyp build",
     "start": "node --napi-modules ."

@@ -16,7 +16,11 @@ napi_env _env;
 
 napi_ref _errorCallbackReference;
 napi_ref _cursorPosCallbackReference;
-
+napi_ref _keyCallbackReference;
+napi_ref _framebufferSizeCallbackReference;
+napi_ref _mouseButtonCallbackReference;
+napi_ref _windowCloseCallbackReference;
+napi_ref _windowSizeCallbackReference;
 
 DECLARE_NAPI_METHOD(MakeContextCurrent){
     GET_NAPI_PARAMS_INFO(1);
@@ -149,21 +153,8 @@ DECLARE_NAPI_METHOD(GetCursorPos){
 
     double xpos;
     double ypos;
-
-    napi_value val;
-    napi_value returnValue;
-
     glfwGetCursorPos(window, &xpos, &ypos);
-
-    NAPI_CALL(env, napi_create_object(env, &returnValue));
-
-    NAPI_CALL(env, napi_create_number(env, xpos, &val));
-    NAPI_CALL(env, napi_set_named_property(env, returnValue, "xpos", val));
-
-    NAPI_CALL(env, napi_create_number(env, ypos, &val));
-    NAPI_CALL(env, napi_set_named_property(env, returnValue, "ypos", val));
-
-    return returnValue;
+    RETURN_NAPI_2NUMBER_OBJECT(xpos, ypos);
 }
 
 DECLARE_NAPI_METHOD(GetInputMode){
@@ -283,11 +274,12 @@ DECLARE_NAPI_METHOD(SetCursorPos){
 }
 
 void napiGlfwCursorPosCallback(GLFWwindow* window, double xpos, double ypos){
-    napi_value callbackArgs[2];
-    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, xpos, &callbackArgs[0]));
-    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, ypos, &callbackArgs[1]));
+    napi_value callbackArgs[3];
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, (uint64_t)window, &callbackArgs[0]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, xpos, &callbackArgs[1]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, ypos, &callbackArgs[2]));
 
-    CALL_NAPI_FUNCTION_GLFW_CALLBACK(_cursorPosCallbackReference, 2, callbackArgs);
+    CALL_NAPI_FUNCTION_GLFW_CALLBACK(_cursorPosCallbackReference, 3, callbackArgs);
 }
 
 DECLARE_NAPI_METHOD(SetCursorPosCallback){
@@ -314,6 +306,51 @@ DECLARE_NAPI_METHOD(SetInputMode){
     RETURN_NAPI_UNDEFINED();
 }
 
+void napiGlfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){
+    napi_value callbackArgs[5];
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, (uint64_t)window, &callbackArgs[0]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, key, &callbackArgs[1]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, scancode, &callbackArgs[2]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, action, &callbackArgs[3]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, mods, &callbackArgs[4]));
+
+    CALL_NAPI_FUNCTION_GLFW_CALLBACK(_keyCallbackReference, 5, callbackArgs);
+}
+
+DECLARE_NAPI_METHOD(SetKeyCallback){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GET_NAPI_PARAM_FUNCTION(keyCallback, 1);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    NAPI_CALL(env, napi_create_reference(env, keyCallback, 1, &_keyCallbackReference));
+
+    glfwSetKeyCallback(window, napiGlfwKeyCallback);
+    RETURN_NAPI_UNDEFINED();
+}
+
+void napiGlfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
+    napi_value callbackArgs[4];
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, (uint64_t)window, &callbackArgs[0]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, button, &callbackArgs[1]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, action, &callbackArgs[2]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, mods, &callbackArgs[3]));
+
+    CALL_NAPI_FUNCTION_GLFW_CALLBACK(_mouseButtonCallbackReference, 4, callbackArgs);
+}
+
+DECLARE_NAPI_METHOD(SetMouseButtonCallback){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GET_NAPI_PARAM_FUNCTION(mouseButtonCallback, 1);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    NAPI_CALL(env, napi_create_reference(env, mouseButtonCallback, 1, &_mouseButtonCallbackReference));
+
+    glfwSetMouseButtonCallback(window, napiGlfwMouseButtonCallback);
+    RETURN_NAPI_UNDEFINED();
+}
+
 DECLARE_NAPI_METHOD(SetTime){
     GET_NAPI_PARAMS_INFO(1);
     GET_NAPI_PARAM_DOUBLE(time, 0);
@@ -335,7 +372,6 @@ DECLARE_NAPI_METHOD(CreateWindow){
 
     GLFWmonitor* monitor = NULL;
     GLFWwindow* share = NULL;
-    GLFWwindow* window;
 
     if(argc >= 4){
         GET_NAPI_PARAM_INT64(_monitor, 3);
@@ -347,9 +383,131 @@ DECLARE_NAPI_METHOD(CreateWindow){
         share = (GLFWwindow*)_share;
     }
 
-    window = glfwCreateWindow(width, height, title, monitor, share);
+    RETURN_NAPI_NUMBER((uint64_t)glfwCreateWindow(width, height, title, monitor, share));
+}
 
-    RETURN_NAPI_NUMBER((uint64_t)window);
+DECLARE_NAPI_METHOD(DestroyWindow){
+    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    glfwDestroyWindow(window);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(WindowShouldClose){
+    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    RETURN_NAPI_BOOL(glfwWindowShouldClose(window));
+}
+
+DECLARE_NAPI_METHOD(SetWindowTitle){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GET_NAPI_PARAM_STRING(title, 1);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    glfwSetWindowTitle(window, title);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(GetWindowSize){
+    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    int width;
+    int height;
+
+    glfwGetWindowSize(window, &width, &height);
+    RETURN_NAPI_2NUMBER_OBJECT(width, height);
+}
+
+DECLARE_NAPI_METHOD(SetWindowSize){
+    GET_NAPI_PARAMS_INFO(3);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GET_NAPI_PARAM_INT32(width, 1);
+    GET_NAPI_PARAM_INT32(height, 2);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    glfwSetWindowSize(window, width, height);
+    RETURN_NAPI_UNDEFINED();
+}
+
+DECLARE_NAPI_METHOD(GetFramebufferSize){
+    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    int width;
+    int height;
+
+    glfwGetFramebufferSize(window, &width, &height);
+    RETURN_NAPI_2NUMBER_OBJECT(width, height);
+}
+
+void napiGlfwWindowSizeCallback(GLFWwindow* window, int width, int height){
+    napi_value callbackArgs[3];
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, (uint64_t)window, &callbackArgs[0]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, width, &callbackArgs[1]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, height, &callbackArgs[2]));
+
+    CALL_NAPI_FUNCTION_GLFW_CALLBACK(_windowSizeCallbackReference, 3, callbackArgs);
+}
+
+DECLARE_NAPI_METHOD(SetWindowSizeCallback){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GET_NAPI_PARAM_FUNCTION(windowSizeCallback, 1);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    NAPI_CALL(env, napi_create_reference(env, windowSizeCallback, 1, &_windowSizeCallbackReference));
+
+    glfwSetWindowSizeCallback(window, napiGlfwWindowSizeCallback);
+    RETURN_NAPI_UNDEFINED();
+}
+
+void napiGlfwWindowCloseCallback(GLFWwindow* window){
+    napi_value callbackArgs[1];
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, (uint64_t)window, &callbackArgs[0]));
+
+    CALL_NAPI_FUNCTION_GLFW_CALLBACK(_windowCloseCallbackReference, 1, callbackArgs);
+}
+
+DECLARE_NAPI_METHOD(SetWindowCloseCallback){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GET_NAPI_PARAM_FUNCTION(windowCloseCallback, 1);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    NAPI_CALL(env, napi_create_reference(env, windowCloseCallback, 1, &_windowCloseCallbackReference));
+
+    glfwSetWindowCloseCallback(window, napiGlfwWindowCloseCallback);
+    RETURN_NAPI_UNDEFINED();
+}
+
+void napiGlfwFramebufferSizeCallback(GLFWwindow* window, int width, int height){
+    napi_value callbackArgs[3];
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, (uint64_t)window, &callbackArgs[0]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, width, &callbackArgs[1]));
+    NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, height, &callbackArgs[2]));
+
+    CALL_NAPI_FUNCTION_GLFW_CALLBACK(_framebufferSizeCallbackReference, 3, callbackArgs);
+}
+
+
+DECLARE_NAPI_METHOD(SetFramebufferSizeCallback){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT64(_window, 0);
+    GET_NAPI_PARAM_FUNCTION(framebufferSizeCallback, 1);
+    GLFWwindow* window = (GLFWwindow*)_window;
+
+    NAPI_CALL(env, napi_create_reference(env, framebufferSizeCallback, 1, &_framebufferSizeCallbackReference));
+
+    glfwSetFramebufferSizeCallback(window, napiGlfwFramebufferSizeCallback);
+    RETURN_NAPI_UNDEFINED();
 }
 
 DECLARE_NAPI_METHOD(PollEvents){
@@ -374,13 +532,11 @@ DECLARE_NAPI_METHOD(GetMonitors){
 
 
 DECLARE_NAPI_METHOD(InitGlad){
-    gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress);
-
-    RETURN_NAPI_UNDEFINED();
+    RETURN_NAPI_BOOL(gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress));
 }
 
 void onExit(){
-    printf("goodbye!");
+    glfwTerminate();
 }
 
 void onSigInt(int dummy){
@@ -422,7 +578,7 @@ void _ModuleInit(napi_env env, napi_value exports, napi_value module, void* priv
     EXPORT_NAPI_METHOD("getInputMode", GetInputMode);
     EXPORT_NAPI_METHOD("getJoystickAxes", GetJoystickAxes);
     EXPORT_NAPI_METHOD("getJoystickButtons", GetJoystickButtons);
-    EXPORT_NAPI_METHOD("glfwGetJoystickName", GetJoystickName);
+    EXPORT_NAPI_METHOD("getJoystickName", GetJoystickName);
     EXPORT_NAPI_METHOD("getKey", GetKey);
     EXPORT_NAPI_METHOD("getKeyName", GetKeyName);
     EXPORT_NAPI_METHOD("getMouseButton", GetMouseButton);
@@ -440,19 +596,64 @@ void _ModuleInit(napi_env env, napi_value exports, napi_value module, void* priv
     //#EXPORT_NAPI_METHOD("setDropCallback", SetDropCallback); - TODO
     EXPORT_NAPI_METHOD("setInputMode", SetInputMode);
     //#EXPORT_NAPI_METHOD("setJoystickCallback", SetJoystickCallback); - TODO
-    //#EXPORT_NAPI_METHOD("setKeyCallback", SetKeyCallback); - TODO
-    //#EXPORT_NAPI_METHOD("setMouseButtonCallback", SetMouseButtonCallback); - TODO
+    EXPORT_NAPI_METHOD("setKeyCallback", SetKeyCallback);
+    EXPORT_NAPI_METHOD("setMouseButtonCallback", SetMouseButtonCallback);
     //#EXPORT_NAPI_METHOD("setScrollCallback", SetScrollCallback); - TODO
     EXPORT_NAPI_METHOD("setTime", SetTime);
 
-
-    // window
-    EXPORT_NAPI_METHOD("createWindow", CreateWindow);
-    EXPORT_NAPI_METHOD("pollEvents", PollEvents);
-    EXPORT_NAPI_METHOD("swapBuffers", SwapBuffers);
-
     // monitor
     EXPORT_NAPI_METHOD("getMonitors", GetMonitors);
+    //EXPORT_NAPI_METHOD("getPrimaryMonitor", GetPrimaryMonitor);
+    //EXPORT_NAPI_METHOD("getMonitorPos", GetMonitorPos);
+    //EXPORT_NAPI_METHOD("getMonitorPhysicalSize", GetMonitorPhysicalSize);
+    //EXPORT_NAPI_METHOD("getMonitorName", GetMonitorName);
+    //EXPORT_NAPI_METHOD("setMonitorCallback", SetMonitorCallback);
+    //EXPORT_NAPI_METHOD("getVideoModes", GetVideoModes);
+    //EXPORT_NAPI_METHOD("getVideoMode", GetVideoMode);
+    //EXPORT_NAPI_METHOD("setGamma", SetGamma);
+    //EXPORT_NAPI_METHOD("getGammaRamp", GetGammaRamp);
+    //EXPORT_NAPI_METHOD("setGammaRamp", SetGammaRamp);
+
+
+    // window
+    //EXPORT_NAPI_METHOD("defaultWindowHints", DefaultWindowHints);
+    //EXPORT_NAPI_METHOD("windowHint", WindowHint);
+    EXPORT_NAPI_METHOD("createWindow", CreateWindow);
+    EXPORT_NAPI_METHOD("destroyWindow", DestroyWindow);
+    EXPORT_NAPI_METHOD("windowShouldClose", WindowShouldClose);
+    //EXPORT_NAPI_METHOD("setWindowShouldClose", SetWindowShouldClose);
+    EXPORT_NAPI_METHOD("setWindowTitle", SetWindowTitle);
+    //EXPORT_NAPI_METHOD("setWindowIcon", SetWindowIcon);
+    //EXPORT_NAPI_METHOD("getWindowPos", GetWindowPos);
+    //EXPORT_NAPI_METHOD("setWindowPos", SetWindowPos);
+    EXPORT_NAPI_METHOD("getWindowSize", GetWindowSize);
+    //EXPORT_NAPI_METHOD("setWindowSizeLimit", SetWindowSizeLimit);
+    //EXPORT_NAPI_METHOD("setWindowAspectRatio", SetWindowAspectRatio);
+    EXPORT_NAPI_METHOD("setWindowSize", SetWindowSize);
+    EXPORT_NAPI_METHOD("getFramebufferSize", GetFramebufferSize);
+    //EXPORT_NAPI_METHOD("getWindowFrameSize", GetWindowFrameSize);
+    //EXPORT_NAPI_METHOD("iconifyWindow", IconifyWindow);
+    //EXPORT_NAPI_METHOD("restoreWindow", RestoreWindow);
+    //EXPORT_NAPI_METHOD("maximizeWindow", MaximizeWindow);
+    //EXPORT_NAPI_METHOD("showWindow", ShowWindow);
+    //EXPORT_NAPI_METHOD("hideWindow", HideWindow);
+    //EXPORT_NAPI_METHOD("focusWindow", FocusWindow);
+    //EXPORT_NAPI_METHOD("getWindowMonitor", GetWindowMonitor);
+    //EXPORT_NAPI_METHOD("setWindowMonitor", SetWindowMonitor);
+    //EXPORT_NAPI_METHOD("getWindowAttrib", GetWindowAttrib);
+    //EXPORT_NAPI_METHOD("setWindowUserPointer", SetWindowUserPointer);
+    //EXPORT_NAPI_METHOD("getWindowUserPointer", GetWindowUserPointer);
+    //EXPORT_NAPI_METHOD("setWindowPosCallback", SetWindowPosCallback);
+    EXPORT_NAPI_METHOD("setWindowSizeCallback", SetWindowSizeCallback);
+    EXPORT_NAPI_METHOD("setWindowCloseCallback", SetWindowCloseCallback);
+    //EXPORT_NAPI_METHOD("setWindowRefreshCallback", SetWindowRefreshCallback);
+    //EXPORT_NAPI_METHOD("setWindowIconifyCallback", SetWindowIconifyCallback);
+    EXPORT_NAPI_METHOD("setFramebufferSizeCallback", SetFramebufferSizeCallback);
+    EXPORT_NAPI_METHOD("pollEvents", PollEvents);
+    //EXPORT_NAPI_METHOD("waitEvents", WaitEvents);
+    //EXPORT_NAPI_METHOD("waitEventsTimeout", WaitEventsTimeout);
+    //EXPORT_NAPI_METHOD("postEmptyEvent", PostEmptyEvent);
+    EXPORT_NAPI_METHOD("swapBuffers", SwapBuffers);
 
     // consts
     EXPORT_NAPI_CONST_GLFW(VERSION_MAJOR);
