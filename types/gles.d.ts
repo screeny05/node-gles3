@@ -1,53 +1,30 @@
-interface GLESActiveInfo {
+export interface GLESObject {}
+
+export interface GLESActiveInfo {
     readonly name: string;
     readonly size: number;
     readonly type: number;
 }
 
-declare var GLESActiveInfo: {
-    prototype: GLESActiveInfo;
-    new(): GLESActiveInfo;
+export interface GLESBuffer extends GLESObject {}
+
+export interface GLESFramebuffer extends GLESObject {}
+
+export interface GLESProgram extends GLESObject {}
+
+export interface GLESRenderbuffer extends GLESObject {}
+
+export interface GLESShader extends GLESObject {}
+
+export interface GLESShaderPrecisionFormat {
+    readonly precision: number;
+    readonly rangeMax: number;
+    readonly rangeMin: number;
 }
 
-interface GLESBuffer extends GLESObject {
-}
+export interface GLESTexture extends GLESObject {}
 
-declare var GLESBuffer: {
-    prototype: GLESBuffer;
-    new(): GLESBuffer;
-}
-
-interface GLESFramebuffer extends GLESObject {
-}
-
-declare var GLESFramebuffer: {
-    prototype: GLESFramebuffer;
-    new(): GLESFramebuffer;
-}
-
-interface GLESObject {
-}
-
-declare var GLESObject: {
-    prototype: GLESObject;
-    new(): GLESObject;
-}
-
-interface GLESProgram extends GLESObject {
-}
-
-declare var GLESProgram: {
-    prototype: GLESProgram;
-    new(): GLESProgram;
-}
-
-interface GLESRenderbuffer extends GLESObject {
-}
-
-declare var GLESRenderbuffer: {
-    prototype: GLESRenderbuffer;
-    new(): GLESRenderbuffer;
-}
+export interface GLESUniformLocation {}
 
 export interface GLESRenderingContext {
     activeTexture(texture: number): void;
@@ -192,7 +169,6 @@ export interface GLESRenderingContext {
     vertexAttrib4fv(indx: number, values: Float32Array): void;
     vertexAttribPointer(indx: number, size: number, type: number, normalized: boolean, stride: number, offset: number): void;
     viewport(x: number, y: number, width: number, height: number): void;
-
 
     readonly DEPTH_BUFFER_BIT: number;
     readonly STENCIL_BUFFER_BIT: number;
@@ -817,44 +793,4 @@ export interface GLESRenderingContext {
     readonly NUM_SAMPLE_COUNTS: number;
     readonly TEXTURE_IMMUTABLE_LEVELS: number;
     readonly ES_VERSION_2_0: number;
-}
-
-declare var GLESRenderingContext: {
-    prototype: GLESRenderingContext;
-    new(): GLESRenderingContext;
-}
-
-interface GLESShader extends GLESObject {
-}
-
-declare var GLESShader: {
-    prototype: GLESShader;
-    new(): GLESShader;
-}
-
-interface GLESShaderPrecisionFormat {
-    readonly precision: number;
-    readonly rangeMax: number;
-    readonly rangeMin: number;
-}
-
-declare var GLESShaderPrecisionFormat: {
-    prototype: GLESShaderPrecisionFormat;
-    new(): GLESShaderPrecisionFormat;
-}
-
-interface GLESTexture extends GLESObject {
-}
-
-declare var GLESTexture: {
-    prototype: GLESTexture;
-    new(): GLESTexture;
-}
-
-interface GLESUniformLocation {
-}
-
-declare var GLESUniformLocation: {
-    prototype: GLESUniformLocation;
-    new(): GLESUniformLocation;
 }

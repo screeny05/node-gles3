@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import * as EventEmitter from 'events';
+import { GLESRenderingContext } from './gles';
 export interface Options {
     width: number;
     height: number;

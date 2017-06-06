@@ -1,3 +1,4 @@
+import { GLESRenderingContext } from '../types/gles';
 import { rawGlfw, rawGles } from '.';
 
 import * as EventEmitter from 'events';
