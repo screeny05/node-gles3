@@ -1,32 +1,32 @@
-export interface GLESObject {}
+interface GLESObject {}
 
-export interface GLESActiveInfo {
+interface GLESActiveInfo {
     readonly name: string;
     readonly size: number;
     readonly type: number;
 }
 
-export interface GLESBuffer extends GLESObject {}
+interface GLESBuffer extends GLESObject {}
 
-export interface GLESFramebuffer extends GLESObject {}
+interface GLESFramebuffer extends GLESObject {}
 
-export interface GLESProgram extends GLESObject {}
+interface GLESProgram extends GLESObject {}
 
-export interface GLESRenderbuffer extends GLESObject {}
+interface GLESRenderbuffer extends GLESObject {}
 
-export interface GLESShader extends GLESObject {}
+interface GLESShader extends GLESObject {}
 
-export interface GLESShaderPrecisionFormat {
+interface GLESShaderPrecisionFormat {
     readonly precision: number;
     readonly rangeMax: number;
     readonly rangeMin: number;
 }
 
-export interface GLESTexture extends GLESObject {}
+interface GLESTexture extends GLESObject {}
 
-export interface GLESUniformLocation {}
+interface GLESUniformLocation {}
 
-export interface GLESRenderingContext {
+interface GLESRenderingContext {
     activeTexture(texture: number): void;
     attachShader(program: GLESProgram | null, shader: GLESShader | null): void;
     bindAttribLocation(program: GLESProgram | null, index: number, name: string): void;

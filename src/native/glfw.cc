@@ -11,7 +11,6 @@
 
 #include "scn_napi.h"
 
-
 napi_env _env;
 
 napi_ref _errorCallbackReference;
@@ -100,6 +99,7 @@ void napiGlfwErrorCallback(int error, const char* description){
     napi_value callbackArgs[2];
     NAPI_CALL_RETURN_VOID(_env, napi_create_number(_env, error, &callbackArgs[0]));
     NAPI_CALL_RETURN_VOID(_env, napi_create_string_utf8(_env, description, -1, &callbackArgs[1]));
+    printf("Error called: %d %s\n", error, description);
 
     CALL_NAPI_FUNCTION_GLFW_CALLBACK(_errorCallbackReference, 2, callbackArgs);
 }
@@ -209,7 +209,7 @@ DECLARE_NAPI_METHOD(GetKey){
 DECLARE_NAPI_METHOD(GetKeyName){
     GET_NAPI_PARAMS_INFO(2);
     GET_NAPI_PARAM_INT64(key, 0);
-    GET_NAPI_PARAM_INT64(scancode, 0);
+    GET_NAPI_PARAM_INT64(scancode, 1);
 
     RETURN_NAPI_STRING(glfwGetKeyName(key, scancode));
 }
@@ -362,7 +362,14 @@ DECLARE_NAPI_METHOD(SetTime){
 
 
 
+DECLARE_NAPI_METHOD(WindowHint){
+    GET_NAPI_PARAMS_INFO(2);
+    GET_NAPI_PARAM_INT32(hint, 0);
+    GET_NAPI_PARAM_INT32(value, 1);
 
+    glfwWindowHint(hint, value);
+    RETURN_NAPI_UNDEFINED();
+}
 
 DECLARE_NAPI_METHOD(CreateWindow){
     GET_NAPI_PARAMS_INFO(3);
@@ -617,7 +624,7 @@ void _ModuleInit(napi_env env, napi_value exports, napi_value module, void* priv
 
     // window
     //EXPORT_NAPI_METHOD("defaultWindowHints", DefaultWindowHints);
-    //EXPORT_NAPI_METHOD("windowHint", WindowHint);
+    EXPORT_NAPI_METHOD("windowHint", WindowHint);
     EXPORT_NAPI_METHOD("createWindow", CreateWindow);
     EXPORT_NAPI_METHOD("destroyWindow", DestroyWindow);
     EXPORT_NAPI_METHOD("windowShouldClose", WindowShouldClose);

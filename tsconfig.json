@@ -13,8 +13,7 @@
         "noFallthroughCasesInSwitch": true,
         "strictNullChecks": true,
         "sourceMap": true,
-        "experimentalDecorators": true,
-        "declarationDir": "types"
+        "experimentalDecorators": true
     },
     "exclude": [
         "node_modules",

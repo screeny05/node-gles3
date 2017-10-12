@@ -1,24 +1,23 @@
-import { GLESRenderingContext } from '../types/gles';
 import * as bindings from 'bindings';
 
-const rawGlfw: any = bindings('glfw');
-const rawGles: GLESRenderingContext = bindings('gles');
+const glfw: any = bindings('glfw');
+const gles: GLESRenderingContext = bindings('gles');
 
 // hide both from the console
-(<any>rawGlfw).inspect = (depth, options) => options.stylize('[object GLFW]', 'special');
-(<any>rawGles).inspect = (depth, options) => options.stylize('[object GLES]', 'special');
+(<any>glfw).inspect = (depth, options) => options.stylize('[object GLFW]', 'special');
+(<any>gles).inspect = (depth, options) => options.stylize('[object GLES]', 'special');
 
 // make sure we don't init more than once
-rawGlfw.isInitialized = false;
-rawGlfw.initOnce = () => {
-    if(rawGlfw.isInitialized){
+glfw.isInitialized = false;
+glfw.initOnce = () => {
+    if(glfw.isInitialized){
         return true;
     }
 
-    rawGlfw.isInitialized = true;
-    return rawGlfw.init();
+    glfw.isInitialized = true;
+    return glfw.init();
 }
 
-export { rawGlfw, rawGles };
+export { glfw, gles };
 
 export * from './native-window';

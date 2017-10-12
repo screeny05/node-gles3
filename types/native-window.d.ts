@@ -1,13 +1,12 @@
 /// <reference types="node" />
 import * as EventEmitter from 'events';
-import { GLESRenderingContext } from './gles';
-export interface Options {
+interface Options {
     width: number;
     height: number;
     title: string;
     vsync: boolean;
 }
-export declare class NativeWindow extends EventEmitter {
+declare class NativeWindow extends EventEmitter {
     static defaults: Options;
     glfw: any;
     gl: GLESRenderingContext;

@@ -114,8 +114,8 @@ DECLARE_NAPI_METHOD(BlendFuncSeparate){
     GET_NAPI_PARAMS_INFO(4);
     GET_NAPI_PARAM_GLENUM(srcFactorRGB, 0);
     GET_NAPI_PARAM_GLENUM(destFactorRGB, 1);
-    GET_NAPI_PARAM_GLENUM(srcFactorAlpha, 0);
-    GET_NAPI_PARAM_GLENUM(destFactorAlpha, 1);
+    GET_NAPI_PARAM_GLENUM(srcFactorAlpha, 2);
+    GET_NAPI_PARAM_GLENUM(destFactorAlpha, 3);
 
     glBlendFuncSeparate(srcFactorRGB, destFactorRGB, srcFactorAlpha, destFactorAlpha);
     RETURN_NAPI_UNDEFINED();
@@ -233,7 +233,7 @@ DECLARE_NAPI_METHOD(CompressedTexImage2D){
 
 // WEBGL1-COMPAT
 DECLARE_NAPI_METHOD(CompressedTexSubImage2D){
-    GET_NAPI_PARAMS_INFO(7);
+    GET_NAPI_PARAMS_INFO(8);
     GET_NAPI_PARAM_GLENUM(target, 0);
     GET_NAPI_PARAM_INT32(level, 1);
     GET_NAPI_PARAM_INT32(xoffset, 2);
@@ -627,7 +627,7 @@ DECLARE_NAPI_METHOD(GetIntegerv){
 
 // WEBGL1-COMPAT
 DECLARE_NAPI_METHOD(GetProgramiv){
-    GET_NAPI_PARAMS_INFO(1);
+    GET_NAPI_PARAMS_INFO(2);
     GET_NAPI_PARAM_UINT32(program, 0);
     GET_NAPI_PARAM_GLENUM(pname, 1);
 
@@ -932,7 +932,7 @@ DECLARE_NAPI_METHOD(RenderbufferStorage){
 
 DECLARE_NAPI_METHOD(SampleCoverage){
     GET_NAPI_PARAMS_INFO(2);
-    GET_NAPI_PARAM_GLENUM(value, 0);
+    GET_NAPI_PARAM_DOUBLE(value, 0);
     GET_NAPI_PARAM_BOOL(invert, 1);
 
     glSampleCoverage(value, invert);

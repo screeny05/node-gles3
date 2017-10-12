@@ -1,5 +1,4 @@
-import { GLESRenderingContext } from '../types/gles';
-import { rawGlfw, rawGles } from '.';
+import { glfw, gles } from '.';
 
 import * as EventEmitter from 'events';
 
@@ -8,6 +7,20 @@ export interface Options {
     height: number;
     title: string;
     vsync: boolean;
+    msaa: number;
+}
+
+export const availableErrorCodes = {
+    [glfw.NOT_INITIALIZED]: 'GLFW NOT_INITIALIZED',
+    [glfw.NO_CURRENT_CONTEXT]: 'GLFW NO_CURRENT_CONTEXT',
+    [glfw.INVALID_ENUM]: 'GLFW INVALID_ENUM',
+    [glfw.INVALID_VALUE]: 'GLFW INVALID_VALUE',
+    [glfw.OUT_OF_MEMORY]: 'GLFW OUT_OF_MEMORY',
+    [glfw.API_UNAVAILABLE]: 'GLFW API_UNAVAILABLE',
+    [glfw.VERSION_UNAVAILABLE]: 'GLFW VERSION_UNAVAILABLE',
+    [glfw.PLATFORM_ERROR]: 'GLFW PLATFORM_ERROR',
+    [glfw.FORMAT_UNAVAILABLE]: 'GLFW FORMAT_UNAVAILABLE',
+    [glfw.NO_WINDOW_CONTEXT]: 'GLFW NO_WINDOW_CONTEXT',
 }
 
 export class NativeWindow extends EventEmitter {
@@ -16,6 +29,7 @@ export class NativeWindow extends EventEmitter {
         height: 600,
         title: '',
         vsync: false,
+        msaa: 4
     };
 
     glfw: any;
@@ -39,12 +53,21 @@ export class NativeWindow extends EventEmitter {
         super();
         options = { ...NativeWindow.defaults, ...options };
 
-        this.glfw = rawGlfw;
-        this.gl = rawGles;
+        this.glfw = glfw;
+        this.gl = gles;
 
         if(!this.glfw.initOnce()){
             throw new Error('NativeWindow: unable to initialize GLFW');
         }
+
+        this.glfw.setErrorCallback((code, message) => this.onError.bind(this));
+
+
+        //this.glfw.windowHint(this.glfw.CONTEXT_VERSION_MAJOR, 4);
+        //this.glfw.windowHint(this.glfw.CONTEXT_VERSION_MINOR, 1);
+        //this.glfw.windowHint(this.glfw.OPENGL_FORWARD_COMPAT, this.gl.TRUE);
+        //this.glfw.windowHint(this.glfw.OPENGL_PROFILE, this.glfw.OPENGL_CORE_PROFILE);
+        this.glfw.windowHint(this.glfw.SAMPLES, options.msaa);
 
         this._width = options.width;
         this._height = options.height;
@@ -57,7 +80,6 @@ export class NativeWindow extends EventEmitter {
             throw new Error('NativeWindow: unable to initialize Window');
         }
 
-        this.glfw.setErrorCallback((code, message) => this.emit('error', { code, message }));
         this.glfw.setFramebufferSizeCallback(this.handle, this.onFramebufferSize.bind(this));
         this.glfw.setWindowSizeCallback(this.handle, this.onWindowSize.bind(this));
         this.glfw.setWindowCloseCallback(this.handle, this.onWindowClose.bind(this));
@@ -94,6 +116,11 @@ export class NativeWindow extends EventEmitter {
         }
     }
 
+    onError(code, message){
+        this.emit('error', { code, message });
+        console.log('GLFW ERR:', code, message);
+    }
+
     onFramebufferSize(handle, width, height): void {
         if(handle !== this.handle){ return; }
         this.fbWidth = width;
@@ -123,9 +150,9 @@ export class NativeWindow extends EventEmitter {
         const data = { key, scancode, action, modes };
         this.emit('key', data);
 
-        if(action === rawGlfw.PRESS){
+        if(action === glfw.PRESS){
             this.emit('keydown', data);
-        } else if(action === rawGlfw.RELEASE){
+        } else if(action === glfw.RELEASE){
             this.emit('keyup', data);
         }
     }
@@ -135,9 +162,9 @@ export class NativeWindow extends EventEmitter {
         const data = { handle, button, action, mods };
         this.emit('mousebutton', data);
 
-        if(action === rawGlfw.PRESS){
+        if(action === glfw.PRESS){
             this.emit('mousedown', data);
-        } else if(action === rawGlfw.RELEASE){
+        } else if(action === glfw.RELEASE){
             this.emit('mouseup', data);
         }
     }
